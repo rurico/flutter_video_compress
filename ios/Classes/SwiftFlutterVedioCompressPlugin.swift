@@ -30,13 +30,13 @@ public class SwiftFlutterVedioCompressPlugin: NSObject, FlutterPlugin {
     let asset = AVAsset(url: URL(fileURLWithPath: path))
     let assetImgGenerate = AVAssetImageGenerator(asset: asset)
     assetImgGenerate.appliesPreferredTrackTransform = true
-    let time = CMTimeMakeWithSeconds(Float64(1), 100)
+    let time = CMTimeMakeWithSeconds(Float64(1), preferredTimescale: 100)
     do {
       let img = try assetImgGenerate.copyCGImage(at: time, actualTime: nil)
       let thumbnail = UIImage(cgImage: img)
       let qualityResult = CGFloat(0.01 * Double(truncating: quality))
       print(qualityResult)
-      let data = UIImageJPEGRepresentation(thumbnail, qualityResult)
+      let data = thumbnail.jpegData(compressionQuality: qualityResult)
       result(data)
     } catch {
       print(error)

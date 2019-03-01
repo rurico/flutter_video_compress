@@ -1,3 +1,6 @@
+## 0.1.3
+* fix: fix ios 4.2 version bugs
+
 ## 0.1.2
 * fix: fix ios build swift_version
 

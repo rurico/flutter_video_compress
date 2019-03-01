@@ -1,6 +1,6 @@
 name: flutter_vedio_compress
 description: A flutter plugin, compress vedio in a new path, delete or not. get media thumbnail by unit8list, you can select quality.
-version: 0.1.2
+version: 0.1.3
 author: Tenkai Ruri<babichan@outlook.com>
 homepage: https://github.com/TenkaiRuri/flutter_vedio_compress
 
