@@ -1,3 +1,6 @@
+## 0.1.4
+* fix:gradle config 'compile' replaced with 'implementation'
+
 ## 0.1.3
 * fix: fix ios 4.2 version bugs
 
