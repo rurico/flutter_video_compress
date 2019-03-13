@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    compile files('src/libs/pldroid-shortvideo-1.16.2.jar')
+    implementation files('src/libs/pldroid-shortvideo-1.16.2.jar')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
