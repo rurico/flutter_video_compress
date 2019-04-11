@@ -11,15 +11,15 @@ A flutter plugin, compress video in a new path, delete or not. get media thumbna
 ## Methods
 |Function|Parameter|Description|Return|
 |--|--|--|--|
-|getThumbnail|`String path`, `int quality`|Get a `thumbnail` of the video from the uri|`Uint8List` bitmap|
+|getThumbnail|`String path`, `int quality`|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
 |compressVideo|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path`|`String` path|
 
 ## Usage
 **Creating instance.**
 ```dart
 FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
-
 ```
+
 **Get a video file thumbnail**
 ```dart
 final Uint8List _image = await _flutterVideoCompress
