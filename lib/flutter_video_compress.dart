@@ -34,7 +34,7 @@ class FlutterVideoCompress {
   }
 
   /// compress video return new path
-  /// 
+  ///
   /// [path] is the file uri that you want to compress video.
   /// The [deleteOrigin] parameter determines whether you delete the source file.
   Future<String> compressVideo({String path, bool deleteOrigin = false}) async {
