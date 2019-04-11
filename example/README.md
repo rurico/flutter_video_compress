@@ -1,16 +1,54 @@
 # flutter_video_compress_example
 
-Demonstrates how to use the flutter_video_compress plugin.
+```dart
+import 'dart:io';
+import 'dart:typed_data';
 
-## Getting Started
+import 'package:flutter/material.dart';
+import 'dart:async';
 
-This project is a starting point for a Flutter application.
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter_video_compress/flutter_video_compress.dart';
 
-A few resources to get you started if this is your first Flutter project:
+void main() => runApp(MyApp());
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+class _MyAppState extends State<MyApp> {
+  FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+  Uint8List _image;  
+
+  Future<void> _videoPicker() async {
+    File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+    if (file != null && mounted) {
+      _image = await _flutterVideoCompress
+          .getThumbnail(path: file.path, quality: 50)
+          .whenComplete(() {
+        setState(() {});
+      });
+      final String newPath = await _flutterVideoCompress.compressVideo(
+          path: file.path, deleteOrigin: true);
+      print(newPath);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _list = <Widget>[
+      FlatButton(child: Text('take video'), onPressed: _videoPicker),
+    ];
+    if (_image != null) {
+      _list.add(Flexible(child: Center(child: Image.memory(_image))));
+    }
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Plugin example app')),
+        body: Column(children: _list),
+      ),
+    );
+  }
+}
+```

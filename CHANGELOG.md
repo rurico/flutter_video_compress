@@ -1,3 +1,6 @@
+## 0.1.6
+* docs: Better documentation
+
 ## 0.1.5
 * CHANGELOG.md
 * fix: supported x86 arm64-v8a armeabi armeabi-v7a
