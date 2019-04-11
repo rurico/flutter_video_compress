@@ -1,6 +1,6 @@
-# flutter_vedio_compress_example
+# flutter_video_compress_example
 
-Demonstrates how to use the flutter_vedio_compress plugin.
+Demonstrates how to use the flutter_video_compress plugin.
 
 ## Getting Started
 

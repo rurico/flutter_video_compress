@@ -1,9 +1,9 @@
-name: flutter_vedio_compress_example
-description: Demonstrates how to use the flutter_vedio_compress plugin.
+name: flutter_video_compress_example
+description: Demonstrates how to use the flutter_video_compress plugin.
 publish_to: 'none'
 
 environment:
-  sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -12,13 +12,13 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  image_picker: ^0.5.0+3
+  image_picker: ^0.5.3
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_vedio_compress:
+  flutter_video_compress:
     path: ../
 
 # For information on the generic Dart part of this file, see the

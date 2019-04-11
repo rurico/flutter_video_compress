@@ -1,12 +1,11 @@
 import Flutter
 import UIKit
-import AVFoundation
 
-public class SwiftFlutterVedioCompressPlugin: NSObject, FlutterPlugin {
-  private let channelName = "flutter_vedio_compress"
+public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
+  private let channelName = "flutter_video_compress"
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_vedio_compress", binaryMessenger: registrar.messenger())
-    let instance = SwiftFlutterVedioCompressPlugin()
+    let channel = FlutterMethodChannel(name: "flutter_video_compress", binaryMessenger: registrar.messenger())
+    let instance = SwiftFlutterVideoCompressPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
   
@@ -17,10 +16,10 @@ public class SwiftFlutterVedioCompressPlugin: NSObject, FlutterPlugin {
       let path = args!["path"] as! String
       let quality = args!["quality"] as! NSNumber
       getThumbnail(path, quality, result)
-    case "compressVedio":
+    case "compressVideo":
       let path = args!["path"] as! String
       let deleteOrigin = args!["deleteOrigin"] as! Bool
-      compressVedio(path, deleteOrigin, result)
+      compressVideo(path, deleteOrigin, result)
     default:
       result(FlutterMethodNotImplemented)
     }
@@ -43,7 +42,7 @@ public class SwiftFlutterVedioCompressPlugin: NSObject, FlutterPlugin {
     }
   }
   
-  private func compressVedio(_ path: String, _ deleteOrigin: Bool,_ result: @escaping FlutterResult) {
+  private func compressVideo(_ path: String, _ deleteOrigin: Bool,_ result: @escaping FlutterResult) {
     let baseDirectory = NSTemporaryDirectory()
     
     let url = URL(fileURLWithPath: path)
@@ -53,7 +52,7 @@ public class SwiftFlutterVedioCompressPlugin: NSObject, FlutterPlugin {
     let fileName = url.lastPathComponent.replacingOccurrences(of: ".MOV", with: "")
     
     let fileManager = FileManager.default
-    let compressPath = "\(baseDirectory)flutter_vedio_compress"
+    let compressPath = "\(baseDirectory)flutter_video_compress"
     do {
       if !fileManager.fileExists(atPath: compressPath) {
         try! fileManager.createDirectory(atPath: compressPath,

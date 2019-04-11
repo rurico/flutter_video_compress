@@ -1,11 +1,10 @@
+
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
-
+import 'package:flutter_video_compress/flutter_video_compress.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_vedio_compress/flutter_vedio_compress.dart';
 
 void main() => runApp(MyApp());
 
@@ -15,23 +14,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FlutterVedioCompress _flutterVedioCompress;
+  FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
-
-  @override
-  void initState() {
-    _flutterVedioCompress = FlutterVedioCompress();
-  }
 
   Future<void> _videoPicker() async {
     File file = await ImagePicker.pickVideo(source: ImageSource.camera);
     if (file != null && mounted) {
-      _image = await _flutterVedioCompress
+      _image = await _flutterVideoCompress
           .getThumbnail(path: file.path, quality: 50)
           .whenComplete(() {
         setState(() {});
       });
-      final String newPath = await _flutterVedioCompress.compressVedio(
+      final String newPath = await _flutterVideoCompress.compressVideo(
           path: file.path, deleteOrigin: true);
       print(newPath);
     }
@@ -40,7 +34,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final _list = <Widget>[
-      FlatButton(child: Text('take vedio'), onPressed: _videoPicker),
+      FlatButton(child: Text('take video'), onPressed: _videoPicker),
     ];
     if (_image != null) {
       _list.add(Flexible(child: Center(child: Image.memory(_image))));
