@@ -1,5 +1,5 @@
 ## 0.1.5
-* rename plugin name [vedio] -> [video]
+* CHANGELOG.md
 * fix: supported x86 arm64-v8a armeabi armeabi-v7a
 
 ## 0.1.4
