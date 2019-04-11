@@ -1,3 +1,6 @@
+## 0.1.7
+* docs: Better Readme
+
 ## 0.1.6
 * docs: Better documentation
 
