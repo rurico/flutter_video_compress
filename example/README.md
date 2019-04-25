@@ -44,7 +44,7 @@ class _MyAppState extends State<MyApp> {
     return _list;
 
     // dart 2.3
-    // final _list =  [
+    // final _list = [
     //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
     //   if(_image != null) Flexible(child: Image.memory(_image))
     // ];
