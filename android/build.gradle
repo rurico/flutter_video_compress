@@ -40,6 +40,6 @@ android {
 }
 
 dependencies {
-    implementation files('src/libs/pldroid-shortvideo-2.0.0.jar')
+    implementation 'nl.bravobit:android-ffmpeg:1.1.5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

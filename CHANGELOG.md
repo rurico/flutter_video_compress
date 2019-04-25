@@ -1,3 +1,8 @@
+## 0.2.0
+* **Breaking change** Migrated dependent sdk, Upgraded kotlin and gradle versions
+* fix: solved Android transcoding video error code 8
+* update example/README.md
+
 ## 0.1.7
 * docs: Better Readme
 
