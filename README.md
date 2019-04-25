@@ -1,6 +1,6 @@
 # flutter_video_compress
 
-A flutter plugin, compress video in a new path, delete or not. get media thumbnail by unit8list, you can select quality.
+Compressed video generates a new path, you can choose to keep the source video or delete it, and provide a function to get a thumbnail of the video file.
 
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
