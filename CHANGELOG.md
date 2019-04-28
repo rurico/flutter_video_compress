@@ -1,3 +1,8 @@
+## 0.2.0+1
+* **Breaking change** Migrated dependent sdk, Upgraded kotlin and gradle versions
+* fix: Android video type changed h264
+* update example/README.md
+
 ## 0.2.0
 * **Breaking change** Migrated dependent sdk, Upgraded kotlin and gradle versions
 * fix: solved Android transcoding video error code 8

@@ -84,7 +84,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
 
         val newPath = folder + path.substring(lastIndex)
 
-        val cmd = arrayOf("-i", path, "-vcodec", "libx264", "-crf", "28", "-acodec", "mp3", newPath)
+        val cmd = arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", newPath)
 
         ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
             override fun onFinish() {
