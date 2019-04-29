@@ -12,7 +12,7 @@ Compressed video generates a new path, you can choose to keep the source video o
 |Function|Parameter|Description|Return|
 |--|--|--|--|
 |getThumbnail|`String path`, `int quality`|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
-|compressVideo|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path`|`String` path|
+|compressVideo|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or void(event stop compress)|`String` path|
 
 ## Usage
 **Creating instance.**
