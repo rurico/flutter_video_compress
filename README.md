@@ -111,8 +111,9 @@ If you find that the size of the apk is significantly increased after importing 
 * This Package only use `ffmpeg` without `ffprobe`,but the `ffprobe` still in you apk (`asssets/arm` or `assets/x86`)
 
 add this config in `build.gradle`:
+* __Do not use__ `ignoreAssetsPattern "!x86"` in debug mode, the simulator will. crash
 
-```gradle
+ ```gradle
 android {
   ...
 	
@@ -126,3 +127,4 @@ android {
    
    }
 ```
+[look up for detail](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)
