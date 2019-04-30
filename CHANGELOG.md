@@ -1,3 +1,7 @@
+## 0.2.0+3
+* fix: add some suggestions for reducing apk size
+* update example/README.md
+
 ## 0.2.0+1
 * fix: Android video type changed h264
 
