@@ -21,6 +21,7 @@ FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
 ```
 
 **Get a video file thumbnail**
+
 ```dart
 final Uint8List _image = await _flutterVideoCompress
   .getThumbnail(path: file.path, quality: 50)
@@ -100,3 +101,30 @@ class _MyAppState extends State<MyApp> {
   }
 }
 ```
+
+## Notice
+
+If you find that the size of the apk is significantly increased after importing the plugin, it may be due to the following reasons:
+
+* `x86` folder is included in you apk (`./assets`)
+
+* This Package only use `ffmpeg` without `ffprobe`,but the `ffprobe` still in you apk (`asssets/arm` or `assets/x86`)
+
+add this config in `build.gradle`:
+* __Do not use__ `ignoreAssetsPattern "!x86"` in debug mode, the simulator will. crash
+
+ ```gradle
+android {
+  ...
+	
+    // to build apk with unnecessary dependence, you might use this config blow
+   aaptOptions {
+        ignoreAssetsPattern "!x86:!*ffprobe"
+   }
+   
+   buildTypes {
+   ...
+   
+   }
+```
+[look up for detail](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)

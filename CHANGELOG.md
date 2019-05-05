@@ -1,8 +1,10 @@
 ## 0.2.0+3
-* fix: IOS fix import AVFoundation
+* fix: add some suggestions for reducing apk size
+* update example/README.md
 
 ## 0.2.0+2
 * nochange
+* fix: IOS fix import AVFoundation
 
 ## 0.2.0+1
 * fix: Android video type changed h264
