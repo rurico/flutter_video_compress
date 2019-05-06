@@ -14,13 +14,14 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import nl.bravobit.ffmpeg.ExecuteBinaryResponseHandler
 import nl.bravobit.ffmpeg.FFmpeg
+import nl.bravobit.ffmpeg.FFtask
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-
 class FlutterVideoCompressPlugin : MethodCallHandler {
     private val channelName = "flutter_video_compress"
-    private var NOT_LOAD = true
+    private var stopCommand = false
+    private var ffTask: FFtask? = null
 
     companion object {
         private lateinit var reg: Registrar
@@ -39,10 +40,13 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 val quality = call.argument<Int>("quality")!!
                 getThumbnail(path, quality, result)
             }
-            "compressVideo" -> {
+            "startCompress" -> {
                 val path = call.argument<String>("path")!!
                 val deleteOrigin = call.argument<Boolean>("deleteOrigin")!!
-                compressVideo(path, deleteOrigin, result)
+                startCompress(path, deleteOrigin, result)
+            }
+            "stopCompress" -> {
+                stopCompress()
             }
             "getVideoDuration" -> {
                 val path = call.argument<String>("path")!!
@@ -62,21 +66,15 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
         result.success(byteArray.asList().toByteArray())
     }
 
-    private fun getVideoDuration(path: String, result: Result) {
-        val mp = MediaPlayer.create(reg.context(), Uri.fromFile(File(path)))
-        mp.release()
-        result.success(mp.duration)
-    }
-
-    fun compressVideo(path: String, deleteOrigin: Boolean, result: Result) {
+    private fun startCompress(path: String, deleteOrigin: Boolean, result: Result) {
         val ffmpeg = FFmpeg.getInstance(reg.context())
 
         if (!ffmpeg.isSupported) {
-            throw Exception("ffmpeg is supported")
+            return result.error(channelName, "FlutterVideoCompress Error", "ffmpeg is supported this platform")
         }
         val lastIndex = path.lastIndexOf("/")
         val folder = path.substring(0, lastIndex) + "/flutter_video_compress"
-        val folderFile = File(folder);
+        val folderFile = File(folder)
 
         if (!folderFile.exists()) {
             File(folder).mkdirs()
@@ -86,15 +84,34 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
 
         val cmd = arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", newPath)
 
-        ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
+        this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
+            override fun onProgress(message: String) {
+                if (stopCommand) {
+                    print("FlutterVideoCompress: Video compression has stopped")
+                    ffTask?.killRunningProcess()
+                    stopCommand = false
+                    result.success(path)
+                }
+            }
+
             override fun onFinish() {
                 result.success(newPath)
                 if (deleteOrigin) {
                     File(path).delete()
                 }
-
             }
         })
+    }
 
+    private fun stopCompress() {
+        if (ffTask != null && !ffTask!!.isProcessCompleted) {
+            stopCommand = true
+        }
+    }
+
+    private fun getVideoDuration(path: String, result: Result) {
+        val mp = MediaPlayer.create(reg.context(), Uri.fromFile(File(path)))
+        mp.release()
+        result.success(mp.duration)
     }
 }

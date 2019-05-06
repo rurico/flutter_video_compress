@@ -1,3 +1,15 @@
+## 0.2.0+4
+* fix: add some suggestions for reduce apk size
+* **Breaking change** compressVideo api renamed startCompress
+* feat: add stopCompress api
+* update README.md
+
+## 0.2.0+3
+no change
+
+## 0.2.0+2
+* fix: IOS fix import AVFoundation
+
 ## 0.2.0+1
 * fix: Android video type changed h264
 
