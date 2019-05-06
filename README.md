@@ -11,8 +11,9 @@ Compressed video generates a new path, you can choose to keep the source video o
 ## Methods
 |Function|Parameter|Description|Return|
 |--|--|--|--|
-|getThumbnail|`String path`, `int quality`|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
-|compressVideo|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or void(event stop compress)|`String` path|
+|getThumbnail|`String path`, `int quality`(1-100)|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
+|startCompress|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or path(event stop compress)|`String` path|
+|stopCompress| |stop the video being compressed|void|
 
 ## Usage
 **Creating instance.**
@@ -30,10 +31,19 @@ final Uint8List _image = await _flutterVideoCompress
 **Compress a Video**
 ```dart
 final String newPath = await _flutterVideoCompress
-  .compressVideo(path: file.path, deleteOrigin: true);
+  .startCompress(path: file.path, deleteOrigin: true);
   
 print(newPath);
 ```
+
+**Stop Compress**
+
+```dart
+final Uint8List _image = await _flutterVideoCompress
+  .stopCompress()
+```
+
+*Notice!* Android will print InterruptedException, but does not affect the use
 
 ## example
 ```dart
@@ -69,10 +79,15 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> _stopCompress() async {
+    await _flutterVideoCompress.stopCompress();
+  }
+
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
     final _list = <Widget>[
-      FlatButton(child: Text('take video'), onPressed: _videoPicker)
+      FlatButton(child: Text('take video'), onPressed: _videoPicker),
+      FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
     ];
     if (_image != null) {
       _list.add(Flexible(child: Image.memory(_image)));
@@ -82,6 +97,7 @@ class _MyAppState extends State<MyApp> {
     // dart 2.3
     // final _list =  [
     //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
+    //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
     //   if(_image != null) Flexible(child: Image.memory(_image))
     // ];
     // return _list;

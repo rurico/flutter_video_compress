@@ -8,3 +8,5 @@
 build/
 .idea
 .idea/libraries/Dart_SDK.xml
+pubspec.lock
+gen/

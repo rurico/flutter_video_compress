@@ -77,7 +77,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             export.shouldOptimizeForNetworkUse = true
             export.exportAsynchronously(completionHandler: {
                 if(self.stopCommand) {
-                    return result("")
+                    return result(path)
                 }
                 if deleteOrigin {
                     let fileManager = FileManager.default

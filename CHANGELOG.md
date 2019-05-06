@@ -1,9 +1,10 @@
 ## 0.2.0+3
-* fix: add some suggestions for reducing apk size
-* update example/README.md
+* fix: add some suggestions for reduce apk size
+* **Breaking change** compressVideo api renamed startCompress
+* feat: add stopCompress api
+* update README.md
 
 ## 0.2.0+2
-* nochange
 * fix: IOS fix import AVFoundation
 
 ## 0.2.0+1

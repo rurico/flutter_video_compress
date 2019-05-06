@@ -47,7 +47,7 @@ class FlutterVideoCompress {
     });
   }
 
-  /// stop the video being compressed
+  /// Stop the video being compressed
   Future<void> stopCompress() async {
     await _invoke<void>('stopCompress');
   }

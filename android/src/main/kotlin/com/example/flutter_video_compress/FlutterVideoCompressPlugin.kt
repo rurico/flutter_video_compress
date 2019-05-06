@@ -18,21 +18,18 @@ import nl.bravobit.ffmpeg.FFtask
 import java.io.ByteArrayOutputStream
 import java.io.File
 
-
 class FlutterVideoCompressPlugin : MethodCallHandler {
     private val channelName = "flutter_video_compress"
-    private var ffTask: FFtask? = null
     private var stopCommand = false
+    private var ffTask: FFtask? = null
 
     companion object {
         private lateinit var reg: Registrar
-        private lateinit var ffmpeg: FFmpeg
         @JvmStatic
         fun registerWith(registrar: Registrar) {
             val channel = MethodChannel(registrar.messenger(), "flutter_video_compress")
             channel.setMethodCallHandler(FlutterVideoCompressPlugin())
             reg = registrar
-            ffmpeg = FFmpeg.getInstance(reg.context())
         }
     }
 
@@ -49,7 +46,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 startCompress(path, deleteOrigin, result)
             }
             "stopCompress" -> {
-                stopCompress(result)
+                stopCompress()
             }
             "getVideoDuration" -> {
                 val path = call.argument<String>("path")!!
@@ -70,6 +67,8 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
     }
 
     private fun startCompress(path: String, deleteOrigin: Boolean, result: Result) {
+        val ffmpeg = FFmpeg.getInstance(reg.context())
+
         if (!ffmpeg.isSupported) {
             return result.error(channelName, "FlutterVideoCompress Error", "ffmpeg is supported this platform")
         }
@@ -85,34 +84,29 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
 
         val cmd = arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", newPath)
 
-        if (this.ffTask == null) this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
-            override fun onFinish() {
+        this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
+            override fun onProgress(message: String) {
                 if (stopCommand) {
-                    return result.success("")
+                    print("FlutterVideoCompress: Video compression has stopped")
+                    ffTask?.killRunningProcess()
+                    stopCommand = false
+                    result.success(path)
                 }
+            }
+
+            override fun onFinish() {
                 result.success(newPath)
                 if (deleteOrigin) {
                     File(path).delete()
                 }
-                ffTask = null
-                stopCommand = false
             }
-        }) else {
-            result.error(channelName, "FlutterVideoCompress Error", "compress video is already Running")
-        }
-
+        })
     }
 
-    private fun stopCompress(result: Result) {
-        if (this.ffTask == null) {
-            return result.error(channelName, "FlutterVideoCompress Error", "you don't have any thing compress")
+    private fun stopCompress() {
+        if (ffTask != null && !ffTask!!.isProcessCompleted) {
+            stopCommand = true
         }
-        ffmpeg.killRunningProcesses(this.ffTask)
-        this.ffTask = null
-
-        stopCommand = true
-        print("FlutterVideoCompress: Video compression has stopped")
-        result.success("")
     }
 
     private fun getVideoDuration(path: String, result: Result) {
