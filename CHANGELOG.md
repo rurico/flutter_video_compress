@@ -1,3 +1,6 @@
+## 0.2.0+5
+* fix: fix the wrong Usage
+
 ## 0.2.0+4
 * fix: add some suggestions for reduce apk size
 * **Breaking change** compressVideo api renamed startCompress
