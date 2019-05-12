@@ -1,7 +1,10 @@
+## 0.2.0+8
+* doc update document
+
 ## 0.2.0+7
 * fix ios getThumbnail path error
 * Better tips of Compressing error
-* start Compress api add whether to cancel the parameter
+* **Breaking change** start Compress api add whether to cancel the parameter
 
 ## 0.2.0+6
 * chore update swift 5

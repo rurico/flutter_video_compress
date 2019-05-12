@@ -12,8 +12,8 @@ Compressed video generates a new path, you can choose to keep the source video o
 |Function|Parameter|Description|Return|
 |--|--|--|--|
 |getThumbnail|`String path`, `int quality`(1-100)|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
-|startCompress|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or path(event stop compress)|`String` path|
-|stopCompress|None|stop the video being compressed|**Future<void>**|
+|startCompress|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or path(event stop compress)|`CompressResult` compressResult|
+|stopCompress|None|stop the video being compressed|`Future<void>`|
 
 ## Usage
 **Creating instance.**
@@ -29,10 +29,10 @@ final Uint8List _image = await _flutterVideoCompress
 
 **Compress a Video**
 ```dart
-final String newPath = await _flutterVideoCompress
+final CompressResult newPath = await _flutterVideoCompress
   .startCompress(path: file.path, deleteOrigin: true);
   
-print(newPath);
+print(newPath.path);
 ```
 
 **Stop Compress**
