@@ -20,35 +20,44 @@ class _MyAppState extends State<MyApp> {
   Uint8List _image;
 
   Future<void> _videoPicker() async {
+    if (mounted) {
     File file = await ImagePicker.pickVideo(source: ImageSource.camera);
-    if (file != null && mounted) {
       _image = await _flutterVideoCompress
           .getThumbnail(path: file.path, quality: 50)
           .whenComplete(() {
         setState(() {});
       });
-      final String newPath = await _flutterVideoCompress.compressVideo(
-          path: file.path, deleteOrigin: true);
-      print(newPath);
+      final CompressResult newPath = await _flutterVideoCompress.startCompress(
+        path: file.path,
+        deleteOrigin: true,
+      );
+      print(newPath.path);
+      print(newPath.isCancel);
     }
+  }
+
+  Future<void> _stopCompress() async {
+    await _flutterVideoCompress.stopCompress();
   }
 
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
-    final _list = <Widget>[
-      FlatButton(child: Text('take video'), onPressed: _videoPicker)
-    ];
-    if (_image != null) {
-      _list.add(Flexible(child: Image.memory(_image)));
-    }
-    return _list;
+    // final _list = <Widget>[
+    //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
+    //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+    // ];
+    // if (_image != null) {
+    //   _list.add(Flexible(child: Image.memory(_image)));
+    // }
+    // return _list;
 
     // dart 2.3
-    // final _list = [
-    //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
-    //   if(_image != null) Flexible(child: Image.memory(_image))
-    // ];
-    // return _list;
+    final _list = [
+      FlatButton(child: Text('take video'), onPressed: _videoPicker),
+      FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      if (_image != null) Flexible(child: Image.memory(_image))
+    ];
+    return _list;
   }
 
   @override

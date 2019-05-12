@@ -24,11 +24,12 @@ class _MyAppState extends State<MyApp> {
           .whenComplete(() {
         setState(() {});
       });
-      final String newPath = await _flutterVideoCompress.startCompress(
+      final CompressResult newPath = await _flutterVideoCompress.startCompress(
         path: file.path,
         deleteOrigin: true,
       );
-      print(newPath);
+      print(newPath.path);
+      print(newPath.isCancel);
     }
   }
 
@@ -38,22 +39,22 @@ class _MyAppState extends State<MyApp> {
 
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
-    final _list = <Widget>[
-      FlatButton(child: Text('take video'), onPressed: _videoPicker),
-      FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
-    ];
-    if (_image != null) {
-      _list.add(Flexible(child: Image.memory(_image)));
-    }
-    return _list;
-
-    // dart 2.3
-    // final _list =  [
+    // final _list = <Widget>[
     //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
     //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
-    //   if(_image != null) Flexible(child: Image.memory(_image))
     // ];
+    // if (_image != null) {
+    //   _list.add(Flexible(child: Image.memory(_image)));
+    // }
     // return _list;
+
+    // dart 2.3
+    final _list = [
+      FlatButton(child: Text('take video'), onPressed: _videoPicker),
+      FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      if (_image != null) Flexible(child: Image.memory(_image))
+    ];
+    return _list;
   }
 
   @override
