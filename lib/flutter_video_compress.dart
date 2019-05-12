@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+
+part 'compress_result.dart';
 
 class FlutterVideoCompress {
   static const MethodChannel _channel =
@@ -39,12 +42,20 @@ class FlutterVideoCompress {
   ///
   /// [path] is the file uri that you want to compress video.
   /// The [deleteOrigin] parameter determines whether you delete the source file.
-  Future<String> startCompress({String path, bool deleteOrigin = false}) async {
+  Future<CompressResult> startCompress(
+      {String path, bool deleteOrigin = false}) async {
     assert(path != null);
-    return await _invoke<String>('startCompress', {
+    final resultPath = await _invoke<String>('startCompress', {
       'path': path,
       'deleteOrigin': deleteOrigin,
     });
+    if (resultPath == null) {
+      throw StateError('''FlutterVideoCompress Error: 
+      Method: startCompress
+      Already have a compression process, you need to wait for the process to finish''');
+    }
+    final isCancel = resultPath.contains('flutter_video_compress');
+    return CompressResult(path: resultPath, isCancel: !isCancel);
   }
 
   /// Stop the video being compressed

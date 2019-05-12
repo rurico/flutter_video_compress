@@ -22,6 +22,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
     private val channelName = "flutter_video_compress"
     private var stopCommand = false
     private var ffTask: FFtask? = null
+    private var isCompressing = false
 
     companion object {
         private lateinit var reg: Registrar
@@ -84,23 +85,31 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
 
         val cmd = arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", newPath)
 
-        this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
-            override fun onProgress(message: String) {
-                if (stopCommand) {
-                    print("FlutterVideoCompress: Video compression has stopped")
-                    ffTask?.killRunningProcess()
-                    stopCommand = false
-                    result.success(path)
-                }
-            }
+        if (!isCompressing) {
+            isCompressing = true
 
-            override fun onFinish() {
-                result.success(newPath)
-                if (deleteOrigin) {
-                    File(path).delete()
+            this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
+                override fun onProgress(message: String) {
+                    if (stopCommand) {
+                        print("FlutterVideoCompress: Video compression has stopped")
+                        ffTask?.killRunningProcess()
+                        stopCommand = false
+                        isCompressing = false
+                        result.success(path)
+                    }
                 }
-            }
-        })
+
+                override fun onFinish() {
+                    isCompressing = false
+                    result.success(newPath)
+                    if (deleteOrigin) {
+                        File(path).delete()
+                    }
+                }
+            })
+        } else {
+            result.error("FlutterVideoCompress", "Already have a compression process", "you need to wait for the process to finish")
+        }
     }
 
     private fun stopCompress() {

@@ -1,3 +1,8 @@
+## 0.2.0+6
+* fix ios getThumbnail path error
+* Better tips of Compressing error
+* start Compress api add whether to cancel the parameter
+
 ## 0.2.0+5
 * fix: fix the wrong Usage
 

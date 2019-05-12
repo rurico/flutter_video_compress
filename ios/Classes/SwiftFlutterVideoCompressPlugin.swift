@@ -6,6 +6,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     private let channelName = "flutter_video_compress"
     private var exporter:AVAssetExportSession? = nil
     private var stopCommand = false
+    private var isCompressing = false
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_video_compress", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterVideoCompressPlugin()
@@ -31,7 +32,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     }
     
     private func getThumbnail(_ path: String,_ quality: NSNumber,_ result: FlutterResult) {
-        let asset = AVAsset(url: URL(fileURLWithPath: path))
+        let asset = AVAsset(url: URL(fileURLWithPath: path.replacingOccurrences(of: "file://", with: "")))
         let assetImgGenerate = AVAssetImageGenerator(asset: asset)
         assetImgGenerate.appliesPreferredTrackTransform = true
         let time = CMTimeMakeWithSeconds(Float64(1), preferredTimescale: 100)
@@ -54,7 +55,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let asset = AVAsset(url: url)
         asset.tracks(withMediaType: AVMediaType.video)
         
-        let fileName = url.lastPathComponent.replacingOccurrences(of: ".MOV", with: "")
+        let fileName = url.deletingPathExtension().lastPathComponent
+        let fileType = url.pathExtension
         
         let fileManager = FileManager.default
         let compressPath = "\(baseDirectory)flutter_video_compress"
@@ -65,34 +67,42 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             }
         }
         
-        let destinationPath: String = "\(compressPath)/\(fileName).mp4"
+        let destinationPath: String = "\(compressPath)/\(fileName).\(fileType)"
         let newVideoPath: NSURL = NSURL(fileURLWithPath: destinationPath)
-        if exporter == nil {
-            exporter = AVAssetExportSession(asset: asset,
-                                            presetName:AVAssetExportPresetLowQuality)!
-        }
-        if let export  = exporter {
-            export.outputURL = newVideoPath as URL
-            export.outputFileType = AVFileType.mp4
-            export.shouldOptimizeForNetworkUse = true
-            export.exportAsynchronously(completionHandler: {
-                if(self.stopCommand) {
-                    return result(path)
-                }
-                if deleteOrigin {
-                    let fileManager = FileManager.default
-                    do {
-                        if fileManager.fileExists(atPath: path) {
-                            try fileManager.removeItem(atPath: path)
-                        }
-                        self.exporter = nil
-                        self.stopCommand = false
-                    } catch let error as NSError {
-                        print(error)
+        
+        if(!isCompressing) {
+            isCompressing = true
+            if exporter == nil {
+                exporter = AVAssetExportSession(asset: asset,
+                                                presetName:AVAssetExportPresetLowQuality)!
+            }
+            if let export  = exporter {
+                export.outputURL = newVideoPath as URL
+                export.outputFileType = AVFileType.mp4
+                export.shouldOptimizeForNetworkUse = true
+                export.exportAsynchronously(completionHandler: {
+                    if(self.stopCommand) {
+                        self.isCompressing = false
+                        return result(path)
                     }
-                }
-                result(newVideoPath.relativePath)
-            })
+                    if deleteOrigin {
+                        let fileManager = FileManager.default
+                        do {
+                            if fileManager.fileExists(atPath: path) {
+                                try fileManager.removeItem(atPath: path)
+                            }
+                            self.isCompressing = false
+                            self.exporter = nil
+                            self.stopCommand = false
+                        } catch let error as NSError {
+                            print(error)
+                        }
+                    }
+                    result(newVideoPath.relativePath)
+                })
+            }
+        } else {
+            result(FlutterError(code: "FlutterVideoCompress", message: "Already have a compression process", details: "you need to wait for the process to finish"))
         }
     }
     
