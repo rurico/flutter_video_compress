@@ -1,6 +1,6 @@
 name: flutter_video_compress
 description: Compressed video generates a new path, you can choose to keep the source video or delete it, and provide a function to get a thumbnail of the video file.
-version: 0.2.0+8
+version: 0.2.0+9
 author: Tenkai Ruri<babichan@outlook.com>
 homepage: https://github.com/TenkaiRuri/flutter_video_compress
 
