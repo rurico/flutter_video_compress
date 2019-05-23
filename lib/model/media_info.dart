@@ -15,7 +15,7 @@ class MediaInfo {
   File file;
 
   MediaInfo({
-    @required this.path,
+    this.path,
     this.title,
     this.author,
     this.width,
