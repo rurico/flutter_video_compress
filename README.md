@@ -18,11 +18,11 @@ target 'Runner' do
 ## Methods
 |function|parameter|description|return|
 |--|--|--|--|
-|getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|[Future<Uint8List>]|
-|getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|[Future<File>]|
-|getMediaInfo|String `[path]`|get media information from `[path]`|[Future<MediaInfo>]|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video from `[path]`|[Future<File>]|
-|stopCompress|`[none]`|stop compressing the file that is currently being compressed.|[Future<void>]|
+|getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<Uint8List>]`|
+|getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<File>]`|
+|getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
+|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video from `[path]`|`[Future<File>]`|
+|stopCompress|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
