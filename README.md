@@ -31,7 +31,7 @@ target 'Runner' do
 
 ## Usage
 **Installing**
-add flutter_video_compress as a dependency in your pubspec.yaml file.
+add [flutter_video_compress](https://pub.dartlang.org/packages/flutter_video_compress) as a dependency in your pubspec.yaml file.
 ```yaml
 dependencies:
   flutter_video_compress: ^0.3.x
