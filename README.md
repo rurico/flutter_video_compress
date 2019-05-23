@@ -1,6 +1,6 @@
 # flutter_video_compress
 
-Compressed video generates a new path, you can choose to keep the source video or delete it, and provide a function to get a thumbnail of the video file.
+Compressed video generates a new path, keep the source video or delete it. provide get video information or get thumbnail of the video file.
 
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
@@ -8,14 +8,35 @@ Compressed video generates a new path, you can choose to keep the source video o
   <a href="https://github.com/TenkaiRuri/flutter_video_compress"><img alt="github stars" src="https://img.shields.io/github/stars/TenkaiRuri/flutter_video_compress.svg?style=social&label=Stars"></a>
 </p>
 
+## IOS adding use_frameworks for swift plugin
+`ios/Podfile` file add **use_frameworks!**
+```ruby
+target 'Runner' do
+  use_frameworks! # <- add this line
+```
+
 ## Methods
-|Function|Parameter|Description|Return|
+|function|parameter|description|return|
 |--|--|--|--|
-|getThumbnail|`String path`, `int quality`(1-100)|Return a `thumbnail` of the video from the input file uri|`Uint8List` bitmap|
-|startCompress|`String path`, `bool deleteOrigin`|Compress the video file and return a `new path` or path(event stop compress)|`CompressResult` compressResult|
-|stopCompress|None|stop the video being compressed|`Future<void>`|
+|getThumbnail|`String [path]`, `int [quality]`(1-100), `int [position]`|get thumbnail from [path]|`[Future<Uint8List>]`|
+|getThumbnailWithFile|`String [path]`, `int [quality]`(1-100), `int [position]`|get thumbnail from [path]|`[Future<File>]`|
+|getMediaInfo|`String [path]`|get media information from [path]|`[Future<MediaInfo>]`|
+|startCompress|`String [path]`, `VideoQuality [quality]` ,`bool [deleteOrigin]`|compress video from [path]|`[Future<File>]`|
+|stopCompress|none|stop compressing the file that is currently being compressed.|`[Future<void>]`|
+
+## Subscriptions
+|subscription|description|stream|
+|--|--|--|
+|compressProgress$|Subscribe the conversion progress|`double [progress]`|
 
 ## Usage
+**Installing**
+add flutter_video_compress as a dependency in your pubspec.yaml file.
+```yaml
+dependencies:
+  flutter_video_compress: ^0.3.x
+```
+
 **Creating instance.**
 ```dart
 FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
@@ -23,21 +44,60 @@ FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
 
 **Get a video file thumbnail**
 ```dart
-final Uint8List _image = await _flutterVideoCompress
-  .getThumbnail(path: file.path, quality: 50)
+final uint8list = await _flutterVideoCompress.getThumbnail(
+  file.path,
+  quality: 50,
+);
+```
+
+**Get a video file thumbnail with file**
+```dart
+final file = await _flutterVideoCompress.getThumbnailWithFile(
+  file.path,
+  quality: 50,
+);
+```
+
+**get media information**
+```dart
+final info = await _flutterVideoCompress.getMediaInfo(file.path);
+print(info.toJson());
 ```
 
 **Compress a Video**
 ```dart
-final CompressResult newPath = await _flutterVideoCompress
-  .startCompress(path: file.path, deleteOrigin: true);
-  
-print(newPath.path);
+final MediaInfo info = await _flutterVideoCompress.startCompress(
+  file.path,
+  deleteOrigin: true,
+);
+print(info.toJson());
 ```
 
 **Stop Compress**
 ```dart
 await _flutterVideoCompress.stopCompress()
+```
+
+**Subscription process processing stream**
+```dart
+class ... extends State<MyApp> {
+  Subscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription =
+        _flutterVideoCompress.compressProgress$.subscribe((progress) {
+      print('progress: $progress');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.unsubscribe();
+  }
+}
 ```
 
 *Notice!* Android will print InterruptedException, but does not affect the use
@@ -61,26 +121,69 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
+  Subscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription =
+        _flutterVideoCompress.compressProgress$.subscribe((progress) {
+      print('progress: $progress');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.unsubscribe();
+  }
 
   Future<void> _videoPicker() async {
     if (mounted) {
-    File file = await ImagePicker.pickVideo(source: ImageSource.camera);
-      _image = await _flutterVideoCompress
-          .getThumbnail(path: file.path, quality: 50)
-          .whenComplete(() {
-        setState(() {});
-      });
-      final CompressResult newPath = await _flutterVideoCompress.startCompress(
-        path: file.path,
-        deleteOrigin: true,
-      );
-      print(newPath.path);
-      print(newPath.isCancel);
+      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      if (file?.path != null) {
+        final thumbnail = await _flutterVideoCompress.getThumbnail(
+          file.path,
+          quality: 50,
+          position: -1,
+        );
+
+        setState(() {
+          _image = thumbnail;
+        });
+
+        final resultFile = await _flutterVideoCompress.getThumbnailWithFile(
+          file.path,
+          quality: 50,
+          position: -1,
+        );
+        print(resultFile.path);
+
+        assert(resultFile.existsSync());
+
+        print('file Exists: ${resultFile.existsSync()}');
+        
+        final MediaInfo info = await _flutterVideoCompress.startCompress(
+          file.path,
+          deleteOrigin: true,
+        );
+        print(info.toJson());
+      }
     }
   }
 
   Future<void> _stopCompress() async {
     await _flutterVideoCompress.stopCompress();
+  }
+
+  Future<void> _getMediaInfo() async {
+    if (mounted) {
+      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      if (file?.path != null) {
+        final info = await _flutterVideoCompress.getMediaInfo(file.path);
+        print(info.toJson());
+      }
+    }
   }
 
   List<Widget> _builColumnChildren() {
@@ -98,6 +201,7 @@ class _MyAppState extends State<MyApp> {
     final _list = [
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
       FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
       if (_image != null) Flexible(child: Image.memory(_image))
     ];
     return _list;

@@ -52,14 +52,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.2.0+9"
+    version: "0.3.0"
   image_picker:
     dependency: "direct main"
     description:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.4+3"
+    version: "0.6.0+4"
   matcher:
     dependency: transitive
     description:

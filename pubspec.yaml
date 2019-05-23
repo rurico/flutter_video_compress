@@ -1,9 +1,8 @@
 name: flutter_video_compress
-description: Compressed video generates a new path, you can choose to keep the source video or delete it, and provide a function to get a thumbnail of the video file.
-version: 0.2.0+9
+description: Compressed video generates a new path, keep the source video or delete it. provide get video information or get thumbnail of the video file.
+version: 0.3.0
 author: Tenkai Ruri<babichan@outlook.com>
 homepage: https://github.com/TenkaiRuri/flutter_video_compress
-
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -15,6 +14,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  image_picker: 0.6.0+4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
@@ -35,10 +35,10 @@ flutter:
   #  - images/a_dot_ham.jpeg
   #
   # For details regarding assets in packages, see
-  # https://flutter.io/assets-and-images/#from-packages
+  # https://flutter.dev/assets-and-images/#from-packages
   #
   # An image asset can refer to one or more resolution-specific "variants", see
-  # https://flutter.io/assets-and-images/#resolution-aware.
+  # https://flutter.dev/assets-and-images/#resolution-aware.
 
   # To add custom fonts to your plugin package, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
@@ -58,4 +58,4 @@ flutter:
   #         weight: 700
   #
   # For details regarding fonts in packages, see
-  # https://flutter.io/custom-fonts/#from-packages
+  # https://flutter.dev/custom-fonts/#from-packages

@@ -1,3 +1,9 @@
+## 0.3.0
+* **Breaking change** refactor ios anderoid lib code
+* feat add getThumbnailWithFile and getMediaInfo api
+* fix android private folder permissions cause possible problems
+* change startCompress api return type
+
 ## 0.2.0+9
 * doc update document
 

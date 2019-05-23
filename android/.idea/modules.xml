@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../example/android/android.iml" filepath="$PROJECT_DIR$/../example/android/android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../example/android/app/app.iml" filepath="$PROJECT_DIR$/../example/android/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/flutter_video_compress.iml" filepath="$PROJECT_DIR$/flutter_video_compress.iml" />
+      <module fileurl="file://$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.0+3/android/image_picker.iml" filepath="$USER_HOME$/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.6.0+3/android/image_picker.iml" />
     </modules>
   </component>
 </project>

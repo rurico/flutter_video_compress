@@ -15,26 +15,69 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
+  Subscription _subscription;
+
+  @override
+  void initState() {
+    super.initState();
+    _subscription =
+        _flutterVideoCompress.compressProgress$.subscribe((progress) {
+      print('progress: $progress');
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.unsubscribe();
+  }
 
   Future<void> _videoPicker() async {
     if (mounted) {
-    File file = await ImagePicker.pickVideo(source: ImageSource.camera);
-      _image = await _flutterVideoCompress
-          .getThumbnail(path: file.path, quality: 50)
-          .whenComplete(() {
-        setState(() {});
-      });
-      final CompressResult newPath = await _flutterVideoCompress.startCompress(
-        path: file.path,
-        deleteOrigin: true,
-      );
-      print(newPath.path);
-      print(newPath.isCancel);
+      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      if (file?.path != null) {
+        final thumbnail = await _flutterVideoCompress.getThumbnail(
+          file.path,
+          quality: 50,
+          position: -1,
+        );
+
+        setState(() {
+          _image = thumbnail;
+        });
+
+        final resultFile = await _flutterVideoCompress.getThumbnailWithFile(
+          file.path,
+          quality: 50,
+          position: -1,
+        );
+        print(resultFile.path);
+
+        assert(resultFile.existsSync());
+
+        print('file Exists: ${resultFile.existsSync()}');
+        
+        final MediaInfo info = await _flutterVideoCompress.startCompress(
+          file.path,
+          deleteOrigin: true,
+        );
+        print(info.toJson());
+      }
     }
   }
 
   Future<void> _stopCompress() async {
     await _flutterVideoCompress.stopCompress();
+  }
+
+  Future<void> _getMediaInfo() async {
+    if (mounted) {
+      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      if (file?.path != null) {
+        final info = await _flutterVideoCompress.getMediaInfo(file.path);
+        print(info.toJson());
+      }
+    }
   }
 
   List<Widget> _builColumnChildren() {
@@ -52,6 +95,7 @@ class _MyAppState extends State<MyApp> {
     final _list = [
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
       FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
       if (_image != null) Flexible(child: Image.memory(_image))
     ];
     return _list;
