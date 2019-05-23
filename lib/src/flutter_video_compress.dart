@@ -116,7 +116,7 @@ class FlutterVideoCompress {
   }
 
   /// get media information from [path]
-  /// 
+  ///
   /// ## example
   /// ```dart
   /// final info = await _flutterVideoCompress.getMediaInfo(file.path);
@@ -130,10 +130,10 @@ class FlutterVideoCompress {
   }
 
   /// compress video from [path]
-  /// 
+  ///
   /// you can choose its quality by [quality],
   /// determine whether to delete his source file by [deleteOrigin]
-  /// 
+  ///
   /// ## example
   /// ```dart
   /// final MediaInfo info = await _flutterVideoCompress.startCompress(
@@ -165,9 +165,9 @@ class FlutterVideoCompress {
     return MediaInfo.fromJson(jsonMap);
   }
 
-  /// stop compressing the file that is currently being compressed. 
+  /// stop compressing the file that is currently being compressed.
   /// If there is no compression process, nothing will happen.
-  /// 
+  ///
   /// ## example
   /// ```dart
   /// await _flutterVideoCompress.stopCompress();

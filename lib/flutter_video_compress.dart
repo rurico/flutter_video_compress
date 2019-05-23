@@ -1,4 +1,4 @@
-/// Compressed video generates a new path, keep the source video or delete it. 
+/// Compressed video generates a new path, keep the source video or delete it.
 /// provide get video information or get thumbnail of the video file.
 
 library flutter_video_compress;
@@ -11,7 +11,6 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 part 'src/flutter_video_compress.dart';
 part 'src/video_quality.dart';
