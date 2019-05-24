@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_video_compress (0.0.1):
+  - flutter_video_compress (0.3.0):
     - Flutter
   - image_picker (0.0.1):
     - Flutter
@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  flutter_video_compress: ebac1e26d112375f99df8992a194b7ff9d89a93f
+  flutter_video_compress: 17f3a9ded3aa398b8ea01439bbcbd60764d3dec9
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
 
 PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
