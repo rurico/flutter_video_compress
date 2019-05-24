@@ -21,7 +21,7 @@ target 'Runner' do
 |getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<Uint8List>]`|
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<File>]`|
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video from `[path]`|`[Future<File>]`|
+|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video from `[path]`|`[Future<MediaInfo>]`|
 |stopCompress|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
 
 ## Subscriptions
@@ -52,7 +52,7 @@ final uint8list = await _flutterVideoCompress.getThumbnail(
 
 **Get a video file thumbnail with file**
 ```dart
-final file = await _flutterVideoCompress.getThumbnailWithFile(
+final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
   quality: 50,
 );
@@ -66,7 +66,7 @@ print(info.toJson());
 
 **Compress a Video**
 ```dart
-final MediaInfo info = await _flutterVideoCompress.startCompress(
+final info = await _flutterVideoCompress.startCompress(
   file.path,
   deleteOrigin: true,
 );
