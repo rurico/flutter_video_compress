@@ -1,10 +1,9 @@
 part of flutter_video_compress;
 
 class FlutterVideoCompress {
-  static FlutterVideoCompress _instance;
   static const _channel = const MethodChannel('flutter_video_compress');
 
-  factory FlutterVideoCompress() => _instance ??= FlutterVideoCompress._();
+  factory FlutterVideoCompress() => FlutterVideoCompress._();
 
   /// Subscribe the conversion progress
   final compressProgress$ = ObservableBuilder<double>(0);
@@ -104,13 +103,13 @@ class FlutterVideoCompress {
     assert(path != null);
     assert(quality > 1 || quality < 100);
 
-    final newPath = await _invoke<String>('getThumbnailWithFile', {
+    final filePath = await _invoke<String>('getThumbnailWithFile', {
       'path': path,
       'quality': quality,
       'position': position,
     });
 
-    final file = File(newPath);
+    final file = File(filePath);
 
     return file;
   }
@@ -151,7 +150,7 @@ class FlutterVideoCompress {
     if (_isCompressing) {
       throw StateError('''FlutterVideoCompress Error: 
       Method: startCompress
-      Already have a compression process, you need to wait for the process to finish''');
+      Already have a compression process, you need to wait for the process to finish or stop it''');
     }
     _isCompressing = true;
     final jsonStr = await _invoke<String>('startCompress', {

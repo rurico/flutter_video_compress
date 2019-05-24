@@ -8,8 +8,24 @@ Compressed video generates a new path, keep the source video or delete it. provi
   <a href="https://github.com/TenkaiRuri/flutter_video_compress"><img alt="github stars" src="https://img.shields.io/github/stars/TenkaiRuri/flutter_video_compress.svg?style=social&label=Stars"></a>
 </p>
 
-## IOS adding use_frameworks for swift plugin
-`ios/Podfile` file add **use_frameworks!**
+## Before Android installation
+If your program not enabled AndroidX, you will need to add the following code to the last line of the `android / build.gradle` file.
+```xml
+rootProject.allprojects {
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'androidx.core' && !details.requested.name.contains('androidx')) {
+                    details.useVersion "1.0.1"
+                }
+            }
+        }
+    }
+}
+```
+
+## Before IOS installation
+If your program not support swift, you need to add the following code in `ios/Podfile`
 ```ruby
 target 'Runner' do
   use_frameworks! # <- add this line
@@ -30,6 +46,7 @@ target 'Runner' do
 |compressProgress$|Subscribe the conversion progress|double `[progress]`|
 
 ## Usage
+
 **Installing**
 add [flutter_video_compress](https://pub.dartlang.org/packages/flutter_video_compress) as a dependency in your pubspec.yaml file.
 ```yaml
@@ -42,7 +59,7 @@ dependencies:
 FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
 ```
 
-**Get a video file thumbnail**
+**Get thumbnail by video file**
 ```dart
 final uint8list = await _flutterVideoCompress.getThumbnail(
   file.path,
@@ -50,7 +67,7 @@ final uint8list = await _flutterVideoCompress.getThumbnail(
 );
 ```
 
-**Get a video file thumbnail with file**
+**Get thumbnail file by video file**
 ```dart
 final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
@@ -58,19 +75,24 @@ final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
 );
 ```
 
-**get media information**
+**Get media information**
 ```dart
 final info = await _flutterVideoCompress.getMediaInfo(file.path);
 print(info.toJson());
 ```
 
-**Compress a Video**
+**Compress Video**
 ```dart
 final info = await _flutterVideoCompress.startCompress(
   file.path,
   deleteOrigin: true,
 );
 print(info.toJson());
+```
+
+**Check Compressing state**
+```dart
+_flutterVideoCompress.isCompressing
 ```
 
 **Stop Compress**

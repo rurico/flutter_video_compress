@@ -103,6 +103,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             let url = URL(fileURLWithPath: "\(initFolder())\(fileName).jpg")
             
             let fileManger = FileManager.default
+            deleteExists(url)
             
             if let data = thumbnail.jpegData(compressionQuality: qualityResult),
                 !fileManger.fileExists(atPath: url.absoluteString) {
@@ -112,6 +113,17 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         }
         catch {
             result(FlutterError(code: channelName,message: "getThumbnail error",details: error))
+        }
+    }
+    
+    private func deleteExists(_ url:URL) {
+        let fileManger = FileManager.default
+        do {
+            if fileManger.fileExists(atPath: url.absoluteString) {
+                try fileManger.removeItem(at: url)
+            }
+        } catch {
+            print(error)
         }
     }
     
@@ -197,7 +209,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let fileType = url.pathExtension
         
         let destinationPath: String = "\(initFolder())/\(fileName).\(fileType)"
-        let newVideoPath: URL = URL(fileURLWithPath: destinationPath)
+        let newVideoPath = URL(fileURLWithPath: destinationPath)
+        deleteExists(newVideoPath)
         
         guard let exporter = AVAssetExportSession(asset: asset,
                                                   presetName:getExportPreset(quality)) else { return }

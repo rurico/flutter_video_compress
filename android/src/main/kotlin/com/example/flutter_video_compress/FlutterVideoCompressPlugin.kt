@@ -121,6 +121,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
         if (!dir.exists()) dir.mkdirs()
 
         val file = File(dir, path.substring(path.lastIndexOf('/'), path.lastIndexOf('.')) + ".jpg")
+        deleteExists(file)
 
         val stream = ByteArrayOutputStream()
         bmp.compress(Bitmap.CompressFormat.JPEG, quality, stream)
@@ -185,6 +186,12 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
         return timeStamp.toLong()
     }
 
+    private fun deleteExists(file: File) {
+        if (file.exists()) {
+            file.delete()
+        }
+    }
+
     private fun startCompress(path: String, quality: Int, deleteOrigin: Boolean, result: Result) {
         val ffmpeg = FFmpeg.getInstance(reg.context())
 
@@ -197,6 +204,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
         if (!dir.exists()) dir.mkdirs()
 
         val file = File(dir, path.substring(path.lastIndexOf("/")))
+        deleteExists(file)
 
         val crf = 28 - quality * 3
 

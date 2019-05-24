@@ -1,3 +1,8 @@
+## 0.3.1
+fix compressed video is null
+fix Bad state: Stream has already been listened to
+fix Video same address cannot be compressed for the second time
+
 ## 0.3.0
 * **Breaking change** refactor ios anderoid lib code
 * feat add getThumbnailWithFile and getMediaInfo api
