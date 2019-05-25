@@ -1,3 +1,6 @@
+## 0.3.3+1
+* docs docs folder to doc
+
 ## 0.3.3
 * docs international documentation increased
 
