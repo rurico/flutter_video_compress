@@ -8,7 +8,7 @@ Compressed video generates a new path, keep the source video or delete it. provi
   <a href="https://github.com/TenkaiRuri/flutter_video_compress"><img alt="github stars" src="https://img.shields.io/github/stars/TenkaiRuri/flutter_video_compress.svg?style=social&label=Stars"></a>
 </p>
 
-## language
+## languages
 [english](README.md) [简体中文](docs/chinese.md) [日本語](docs/japanese.md) 
 
 ## Before Android installation
