@@ -9,7 +9,7 @@
 </p>
 
 ## ランゲージ
-[日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/japanese.md) [english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md) [简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/chinese.md)
+[日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md) [english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md) [简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md)
 
 ## アンドロイドを使用する前にの準備仕事
 アプリケーションが`アンドロイドエクス(AndroidX)`機能が有効ない場合は、 `android￥build.gradle`ファイルの最後の行に以下のコードを追加する必要があります。
