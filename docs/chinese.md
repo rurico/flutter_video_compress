@@ -9,7 +9,7 @@
 </p>
 
 ## 语言
-[简体中文](docs/chinese.md) [日本語](docs/japanese.md) [english](README.md)
+[简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/chinese.md) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/japanese.md) [english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md)
 
 ## 在Android上运行前
 如果你的程序没有启用`AndroidX`，你需要将下列代码添加到你的`android/build.gradle`文件中最后一行
