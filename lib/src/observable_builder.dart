@@ -6,8 +6,6 @@ part of flutter_video_compress;
 class ObservableBuilder<T> {
   final StreamController<T> _observable = StreamController();
 
-  ObservableBuilder();
-
   void next(T value) {
     _observable.add(value);
   }
@@ -16,11 +14,7 @@ class ObservableBuilder<T> {
       {Function onError, void onDone(), bool cancelOnError}) {
     _observable.stream.listen(onData,
         onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-    return Subscription(_unsubscribe);
-  }
-
-  void _unsubscribe() {
-    _observable.close();
+    return Subscription(_observable.close);
   }
 }
 

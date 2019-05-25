@@ -8,8 +8,11 @@ Compressed video generates a new path, keep the source video or delete it. provi
   <a href="https://github.com/TenkaiRuri/flutter_video_compress"><img alt="github stars" src="https://img.shields.io/github/stars/TenkaiRuri/flutter_video_compress.svg?style=social&label=Stars"></a>
 </p>
 
+## ランゲージ
+[english](README.md) [简体中文](docs/chinese.md) [日本語](docs/japanese.md) 
+
 ## Before Android installation
-If your program not enabled AndroidX, you will need to add the following code to the last line of the `android/build.gradle` file.
+If your program not enabled `AndroidX`, you will need to add the following code to the last line of the `android/build.gradle` file.
 ```groovy
 rootProject.allprojects {
     subprojects {
@@ -35,15 +38,15 @@ target 'Runner' do
 |function|parameter|description|return|
 |--|--|--|--|
 |getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<Uint8List>]`|
-|getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<File>]`|
+|getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail file from `[path]`|`[Future<File>]`|
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video from `[path]`|`[Future<MediaInfo>]`|
+|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video at `[path]`|`[Future<MediaInfo>]`|
 |stopCompress|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
 |--|--|--|
-|compressProgress$|Subscribe the conversion progress|double `[progress]`|
+|compressProgress$|Subscribe the conversion progress steam|double `[progress]`|
 
 ## Usage
 
@@ -76,12 +79,16 @@ final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
 ```
 
 **Get media information**
+> Currently only supports video
+
 ```dart
 final info = await _flutterVideoCompress.getMediaInfo(file.path);
 print(info.toJson());
 ```
 
-**Compress Video**
+**Compression Video**
+> Compatible with ios in Android and web after compression
+
 ```dart
 final info = await _flutterVideoCompress.startCompress(
   file.path,
@@ -95,13 +102,14 @@ print(info.toJson());
 _flutterVideoCompress.isCompressing
 ```
 
-**Stop Compress**
+**Stop compression**
+> Android will print InterruptedException, but does not affect the use
+
 ```dart
 await _flutterVideoCompress.stopCompress()
 ```
-*Notice!* Android will print InterruptedException, but does not affect the use
 
-**Subscription process processing stream**
+**Subscribe the conversion progress steam**
 ```dart
 class ... extends State<MyApp> {
   Subscription _subscription;
@@ -127,18 +135,18 @@ class ... extends State<MyApp> {
 
 If you find that the size of the apk is significantly increased after importing the plugin, it may be due to the following reasons:
 
-* `x86` folder is included in you apk (`./assets`)
+* exclude `x86` related files (`./assets`)
 
-* This Package only use `ffmpeg` without `ffprobe`,but the `ffprobe` still in you apk (`asssets/arm` or `assets/x86`)
+* This library does not use `ffprobe`, only uses` ffmpeg`, but the application still has `ffprobe`, so it needs to be excluded (`asssets/arm` or `assets/x86`)
 
 add this config in `build.gradle`:
-* __Do not use__ `ignoreAssetsPattern "!x86"` in debug mode, the simulator will. crash
+* __Do not use__ `ignoreAssetsPattern "!x86"` in debug mode, will crash on the simulator
 
  ```gradle
 android {
   ...
 	
-    // to build apk with unnecessary dependence, you might use this config blow
+    // Reduce your application size with this configuration
    aaptOptions {
         ignoreAssetsPattern "!x86:!*ffprobe"
    }
