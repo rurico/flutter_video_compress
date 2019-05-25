@@ -72,7 +72,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _getMediaInfo() async {
     if (mounted) {
-      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      File file = await ImagePicker.pickVideo(source: ImageSource.gallery);
       if (file?.path != null) {
         final info = await _flutterVideoCompress.getMediaInfo(file.path);
         print(info.toJson());

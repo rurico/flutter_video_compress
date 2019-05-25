@@ -1,10 +1,12 @@
+/// If you read this source code, you may find this surprise.
+/// a small subscription library
+
 part of flutter_video_compress;
 
 class ObservableBuilder<T> {
-  final T _value;
   final StreamController<T> _observable = StreamController();
 
-  ObservableBuilder(this._value) : assert(_value != null);
+  ObservableBuilder();
 
   void next(T value) {
     _observable.add(value);
@@ -18,9 +20,7 @@ class ObservableBuilder<T> {
   }
 
   void _unsubscribe() {
-    _observable
-      ..add(_value)
-      ..close();
+    _observable.close();
   }
 }
 

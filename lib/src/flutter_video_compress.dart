@@ -6,9 +6,9 @@ class FlutterVideoCompress {
   factory FlutterVideoCompress() => FlutterVideoCompress._();
 
   /// Subscribe the conversion progress
-  final compressProgress$ = ObservableBuilder<double>(0);
+  final compressProgress$ = ObservableBuilder<double>();
 
-  /// get state of Compressing
+  /// get is Compressing state
   bool get isCompressing => _isCompressing;
 
   bool _isCompressing = false;
@@ -115,6 +115,8 @@ class FlutterVideoCompress {
   }
 
   /// get media information from [path]
+  /// 
+  /// get media information from [path] return [Future<MediaInfo>]
   ///
   /// ## example
   /// ```dart
@@ -129,13 +131,14 @@ class FlutterVideoCompress {
   }
 
   /// compress video from [path]
+  /// compress video from [path] return [Future<MediaInfo>]
   ///
   /// you can choose its quality by [quality],
   /// determine whether to delete his source file by [deleteOrigin]
   ///
   /// ## example
   /// ```dart
-  /// final MediaInfo info = await _flutterVideoCompress.startCompress(
+  /// final info = await _flutterVideoCompress.startCompress(
   ///   file.path,
   ///   deleteOrigin: true,
   /// );

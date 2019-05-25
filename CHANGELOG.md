@@ -1,3 +1,6 @@
+## 0.3.2
+fix unsubscribe excess stream error
+
 ## 0.3.1
 fix compressed video is null
 fix Bad state: Stream has already been listened to
