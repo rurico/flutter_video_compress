@@ -1,3 +1,6 @@
+## 0.3.3+2
+* document update
+
 ## 0.3.3+1
 * docs docs folder to doc
 

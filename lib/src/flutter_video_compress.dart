@@ -115,7 +115,7 @@ class FlutterVideoCompress {
   }
 
   /// get media information from [path]
-  /// 
+  ///
   /// get media information from [path] return [Future<MediaInfo>]
   ///
   /// ## example
