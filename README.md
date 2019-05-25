@@ -9,7 +9,7 @@ Compressed video generates a new path, keep the source video or delete it. provi
 </p>
 
 ## languages
-[english](README.md) [简体中文](docs/chinese.md) [日本語](docs/japanese.md) 
+[english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md) [简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/chinese.md) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/docs/japanese.md) 
 
 ## Before Android installation
 If your program not enabled `AndroidX`, you will need to add the following code to the last line of the `android/build.gradle` file.
