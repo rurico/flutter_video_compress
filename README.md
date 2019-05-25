@@ -10,7 +10,7 @@ Compressed video generates a new path, keep the source video or delete it. provi
 
 ## Before Android installation
 If your program not enabled AndroidX, you will need to add the following code to the last line of the `android/build.gradle` file.
-```xml
+```groovy
 rootProject.allprojects {
     subprojects {
         project.configurations.all {
