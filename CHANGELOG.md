@@ -1,5 +1,8 @@
+## 0.3.3+3
+* docs update README.md
+
 ## 0.3.3+2
-* document update
+* docs update README.md
 
 ## 0.3.3+1
 * docs docs folder to doc
