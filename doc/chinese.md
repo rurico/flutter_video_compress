@@ -5,7 +5,6 @@
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
   <img alt="license" src="https://img.shields.io/github/license/TenkaiRuri/flutter_video_compress.svg">
-  <a href="https://github.com/TenkaiRuri/flutter_video_compress"><img alt="github stars" src="https://img.shields.io/github/stars/TenkaiRuri/flutter_video_compress.svg?style=social&label=Stars"></a>
 </p>
 
 ## 语言
