@@ -1,7 +1,7 @@
 ---
 name: "😳 enhancement"
 about: New features or enhancements you want
-title: "[enhancement]"
+title: "[Feature]"
 labels: enhancement
 assignees: TenkaiRuri
 
