@@ -12,7 +12,7 @@ Provide detailed contextual explanations to help us understand
 
 ### Backtracking step (if has)
   1. open application
-  2. touch xxx 5 times
+  2. touch somewhere 5 times
   3. crash
 
 ### Code Example (if has)
