@@ -10,6 +10,9 @@ assignees: TenkaiRuri
 ### Description
 Provide detailed contextual explanations to help us understand
 
+### Platform
+IOS|Android|Both|Other
+
 ### Code Example (if has)
 ```dart
 void main() {

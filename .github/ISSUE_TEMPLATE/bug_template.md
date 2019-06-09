@@ -10,6 +10,9 @@ assignees: TenkaiRuri
 ### Description
 Provide detailed contextual explanations to help us understand
 
+### Platform
+IOS|Android|Both|Other
+
 ### Backtracking step (if has)
   1. open application
   2. touch somewhere 5 times
