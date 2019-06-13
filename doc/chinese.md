@@ -27,8 +27,11 @@ rootProject.allprojects {
 }
 ```
 
-## 在Android上运行前
-如果你的APP支持或者没有开启swift，你需要将下面代码添加到`ios/Podfile`中
+## 在IOS上运行前
+如果你的APP支持或者没有开启swift，你需要将下面代码添加到`ios/Podfile`中。
+
+[详情](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
+
 ```ruby
 target 'Runner' do
   use_frameworks! # <- add this line

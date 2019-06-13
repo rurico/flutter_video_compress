@@ -27,7 +27,10 @@ rootProject.allprojects {
 ```
 
 ## Before IOS installation
-If your program not support swift, you need to add the following code in `ios/Podfile`
+If your program not support swift, you need to add the following code in `ios/Podfile`.
+
+[detail](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
+
 ```ruby
 target 'Runner' do
   use_frameworks! # <- add this line
