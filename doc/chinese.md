@@ -28,13 +28,22 @@ rootProject.allprojects {
 ```
 
 ## 在IOS上运行前
-如果你的APP支持或者没有开启swift，你需要将下面代码添加到`ios/Podfile`中。
-
-[详情](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
+如果你的APP支持或者没有开启swift，你需要将下面代码添加到`ios/Podfile`中。[详情](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
 
 ```ruby
 target 'Runner' do
-  use_frameworks! # <- add this line
+  use_frameworks! # <--- add this
+  ...
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+      config.build_settings['SWIFT_VERSION'] = '5.0' # <--- add this
+    end
+  end
+end
 ```
 
 ## 方法
