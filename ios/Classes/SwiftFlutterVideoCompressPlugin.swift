@@ -1,6 +1,7 @@
 import Flutter
 import UIKit
 import AVFoundation
+import Regift
 
 public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     private let channelName = "flutter_video_compress"
@@ -44,6 +45,12 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         case "stopCompress":
             stopCompress()
             result("")
+        case "convertVideoToGif":
+            let path = args!["path"] as! String
+            let startTime = args!["startTime"] as! NSNumber
+            let endTime = args!["endTime"] as! NSNumber
+            let duration = args!["duration"] as! NSNumber
+            convertVideoToGif(path, startTime, endTime, duration, result)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -254,5 +261,37 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     private func stopCompress() {
         exporter?.cancelExport()
         stopCommand = true
+    }
+    
+    private func convertVideoToGif(_ path: String,_ startTime: NSNumber,_ endTime: NSNumber, _     duration:NSNumber,
+                           _ result: FlutterResult) {
+        let gifStartTime = Float(truncating: startTime)
+        var gifDuration = Float(truncating: 0)
+        
+        if gifStartTime > 0 {
+            if startTime.intValue > endTime.intValue {
+                result(FlutterError(code: channelName, message: "startTime should preceed endTime",
+                details: nil))
+            } else {
+                gifDuration  = Float(Float(truncating: endTime) - gifStartTime)
+            }
+        } else {
+            gifDuration = Float(truncating:     duration)
+        }
+        
+        let frameRate = Int(15)
+        let loopCount = Int(0)
+        
+        let sourceFileURL = URL(fileURLWithPath: path)
+        let temporaryFile = (NSTemporaryDirectory() as NSString).appendingPathComponent(sourceFileURL.lastPathComponent)
+        let destinationUrl = URL(fileURLWithPath: temporaryFile)
+        
+        let trimmedRegift = Regift(sourceFileURL: sourceFileURL, destinationFileURL: destinationUrl,
+                                   startTime: gifStartTime, duration: gifDuration, frameRate: frameRate,
+                                   loopCount: loopCount, size: nil)
+        
+        let destinationPath = trimmedRegift.createGif();
+        
+        result(excludeFileProtocol(destinationPath!.absoluteString))
     }
 }
