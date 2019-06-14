@@ -50,6 +50,7 @@ end
 |--|--|--|--|
 |getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail from `[path]`|`[Future<Uint8List>]`|
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail file from `[path]`|`[Future<File>]`|
+|convertVideoToGif|String `[path]`, int `[startTime]`(from 0 start), int `[endTime]`, int `[duration]`|converts provided video to a gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
 |startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video at `[path]`|`[Future<MediaInfo>]`|
 |stopCompress|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
@@ -87,6 +88,16 @@ final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
   quality: 50,
 );
+```
+
+**Converts provided video to a gif.**
+```dart
+final file = await _flutterVideoCompress.convertVideoToGif(
+  videoFile.path,
+  startTime: 0,
+  duration: 5,
+);
+print(file.path);
 ```
 
 **Get media information**

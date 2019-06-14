@@ -51,6 +51,7 @@ end
 |--|--|--|--|
 |getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|`[path]`からサムネイルを取得します|`[Future<Uint8List>]`|
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|`[path]`からサムネイルのファイルを取得します|`[Future<File>]`|
+|convertVideoToGif|String `[path]`, int `[startTime]`(０から始め), int `[endTime]`, int `[duration]`|ビデオをGIFに変換する|`[Future<File>]`|
 |getMediaInfo|String `[path]`|`[path]`からビデオの情報を取得します|`[Future<MediaInfo>]`|
 |startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
 |stopCompress|`[none]`|圧縮中のファイルを停止します|`[Future<void>]`|
@@ -89,6 +90,16 @@ final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
   quality: 50,
 );
+```
+
+**ビデオをGIFに変換する**
+```dart
+final file = await _flutterVideoCompress.convertVideoToGif(
+  videoFile.path,
+  startTime: 0,
+  duration: 5,
+);
+print(file.path);
 ```
 
 **メディア情報を入手する**

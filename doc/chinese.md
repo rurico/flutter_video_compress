@@ -51,6 +51,7 @@ end
 |--|--|--|--|
 |getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图|`[Future<Uint8List>]`|
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图文件|`[Future<File>]`|
+|convertVideoToGif|String `[path]`, int `[startTime]`(从0开始), int `[endTime]`, int `[duration]`|将视频转换为gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|从`[path]`获取媒体信息|`[Future<MediaInfo>]`|
 |startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
 |stopCompress|`[none]`|停止正在压缩的视频|`[Future<void>]`|
@@ -88,6 +89,16 @@ final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
   quality: 50,
 );
+```
+
+**将视频转换为gif**
+```dart
+final file = await _flutterVideoCompress.convertVideoToGif(
+  videoFile.path,
+  startTime: 0,
+  duration: 5,
+);
+print(file.path);
 ```
 
 **获取媒体信息**
