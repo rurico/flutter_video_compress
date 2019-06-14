@@ -114,6 +114,35 @@ class FlutterVideoCompress {
     return file;
   }
 
+  /// crop video to gif from [path]
+  /// crop video to gif from [path] return [Future<File>]
+  ///
+  /// Select the time range using [startTime] and [endTime].
+  /// If you do not know [endTime], you can use [cutSec].
+  /// If [endTime] and [cutSec] exist at the same time, [endTime] is used first.
+  /// Of course, you can leave these parameters blank and use the default.
+  /// ## example
+  /// ```dart
+  /// File = await cropVideoToGif(path)；
+  /// ```
+  Future<File> cropVideoToGif(
+    String path, {
+    int startTime,
+    int endTime,
+    int cutSec, // When you do not know the end time
+  }) async {
+    assert(path != null);
+
+    final gifPath = await _invoke<String>('cropVideoToGif', {
+      'path': path,
+      'startTime': startTime,
+      'endTime': endTime,
+      'cutSec': cutSec
+    });
+
+    return File(gifPath);
+  }
+
   /// get media information from [path]
   ///
   /// get media information from [path] return [Future<MediaInfo>]

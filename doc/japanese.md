@@ -28,7 +28,7 @@ rootProject.allprojects {
 ```
 
 ## IOSを使用する前にの準備仕事
-アプリケーションがswiftをサポートしていない場合は、 `ios￥Podfile`に以下のコードを追加する必要があります、[詳細説明](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
+アプリケーションがswiftをサポートしていない場合は、 `ios￥Podfile`に以下のコードを追加する必要があります [詳細説明](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
 
 ```ruby
 target 'Runner' do
