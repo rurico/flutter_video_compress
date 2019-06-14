@@ -114,33 +114,43 @@ class FlutterVideoCompress {
     return file;
   }
 
-  /// crop video to gif from [path]
-  /// crop video to gif from [path] return [Future<File>]
+  /// converts provided video to a gif. Video is cut starting from [startTime]
+  /// for the provided [duration] or until [endTime] if set. Either [endTime] or
+  /// [duration] has to be set where if both set, [endTime] has priority. [endTime]
+  /// has to be greater than [startTime] in order for this method to work.
+  /// All time variables should be in seconds. Take care of about [duration]
+  /// of the video since the plugin doesn't check if [startTime] is within the
+  /// length of the provided video.
   ///
-  /// Select the time range using [startTime] and [endTime].
-  /// If you do not know [endTime], you can use [cutSec].
-  /// If [endTime] and [cutSec] exist at the same time, [endTime] is used first.
-  /// Of course, you can leave these parameters blank and use the default.
   /// ## example
   /// ```dart
-  /// File = await cropVideoToGif(path)；
+  /// final file = await _flutterVideoCompress.convertVideoToGif(
+  ///   videoFile.path,
+  ///   startTime: 0,
+  ///   duration: 5,
+  /// );
+  /// print(file.path);
   /// ```
-  Future<File> cropVideoToGif(
+  Future<File> convertVideoToGif(
     String path, {
-    int startTime,
-    int endTime,
-    int cutSec, // When you do not know the end time
+    int startTime = 0,
+    int endTime = -1,
+    int duration = -1, // When you do not know the end time
   }) async {
     assert(path != null);
-
-    final gifPath = await _invoke<String>('cropVideoToGif', {
+    if (endTime > 0) {
+      assert(startTime <= endTime);
+    }
+    final filePath = await _invoke<String>('convertVideoToGif', {
       'path': path,
       'startTime': startTime,
       'endTime': endTime,
-      'cutSec': cutSec
+      'duration': duration
     });
 
-    return File(gifPath);
+    final file = File(filePath);
+
+    return file;
   }
 
   /// get media information from [path]
