@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
+  File _imageFile;
   Subscription _subscription;
 
   @override
@@ -56,7 +57,7 @@ class _MyAppState extends State<MyApp> {
         assert(resultFile.existsSync());
 
         print('file Exists: ${resultFile.existsSync()}');
-        
+
         final MediaInfo info = await _flutterVideoCompress.startCompress(
           file.path,
           deleteOrigin: true,
@@ -80,6 +81,21 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  Future<void> _convertVideoToGif() async {
+    if (mounted) {
+      File file = await ImagePicker.pickVideo(source: ImageSource.gallery);
+      if (file?.path != null) {
+        var info = await _flutterVideoCompress.convertVideoToGif(file.path,
+            startTime: 0, duration: 5);
+
+        print(info.path);
+        setState(() {
+          _imageFile = info;
+        });
+      }
+    }
+  }
+
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
     // final _list = <Widget>[
@@ -96,7 +112,12 @@ class _MyAppState extends State<MyApp> {
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
       FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
       FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
-      if (_image != null) Flexible(child: Image.memory(_image))
+      FlatButton(
+          child: Text('convert video to gif'), onPressed: _convertVideoToGif),
+      if (_imageFile != null)
+        Flexible(child: Image.file(_imageFile))
+      else
+        if (_image != null) Flexible(child: Image.memory(_image))
     ];
     return _list;
   }

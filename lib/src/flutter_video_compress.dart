@@ -177,4 +177,43 @@ class FlutterVideoCompress {
   Future<void> stopCompress() async {
     await _invoke<void>('stopCompress');
   }
+
+  /// converts provided video to a gif. Video is cut starting from startTime
+  /// for the provided duration or until endTime if set. Either endTime or
+  /// duration has to be set where if both set, endTime has priority. endTime
+  /// has to be greater than startTime in order for this method to work.
+  /// All time variables should be in seconds. Take care of about duration
+  /// of the video since the plugin doesn't check if startTime is within the
+  /// length of the provided video.
+  ///
+  /// ## example
+  /// ```dart
+  /// final file = await _flutterVideoCompress.convertVideoToGif(
+  ///   videoFile.path,
+  ///   startTime: 0,
+  ///   duration: 5,
+  /// );
+  /// print(file.path);
+  /// ```
+  Future<File> convertVideoToGif(
+    String path, {
+    int startTime = 0,
+    int endTime = -1,
+    int duration = -1, // When you do not know the end time
+  }) async {
+    assert(path != null);
+    if (endTime > 0) {
+      assert(startTime <= endTime);
+    }
+    final filePath = await _invoke<String>('convertVideoToGif', {
+      'path': path,
+      'startTime': startTime,
+      'endTime': endTime,
+      'duration': duration
+    });
+
+    final file = File(filePath);
+
+    return file;
+  }
 }
