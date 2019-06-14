@@ -1,3 +1,7 @@
+## 0.3.4
+* feat add convertVideoToGif api. Cut the video and converts the video to gif.
+* docs update convertVideoToGif associated document
+
 ## 0.3.3+3
 * docs update README.md
 
