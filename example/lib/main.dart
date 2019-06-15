@@ -35,7 +35,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _videoPicker() async {
     if (mounted) {
-      File file = await ImagePicker.pickVideo(source: ImageSource.camera);
+      final file = await ImagePicker.pickVideo(source: ImageSource.camera);
       if (file?.path != null) {
         final thumbnail = await _flutterVideoCompress.getThumbnail(
           file.path,
@@ -61,6 +61,7 @@ class _MyAppState extends State<MyApp> {
         final MediaInfo info = await _flutterVideoCompress.startCompress(
           file.path,
           deleteOrigin: true,
+          quality: VideoQuality.LowQuality
         );
         print(info.toJson());
       }
@@ -73,7 +74,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _getMediaInfo() async {
     if (mounted) {
-      File file = await ImagePicker.pickVideo(source: ImageSource.gallery);
+      final file = await ImagePicker.pickVideo(source: ImageSource.gallery);
       if (file?.path != null) {
         final info = await _flutterVideoCompress.getMediaInfo(file.path);
         print(info.toJson());
@@ -83,10 +84,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> _convertVideoToGif() async {
     if (mounted) {
-      File file = await ImagePicker.pickVideo(source: ImageSource.gallery);
+      final file = await ImagePicker.pickVideo(source: ImageSource.gallery);
       if (file?.path != null) {
-        var info = await _flutterVideoCompress.convertVideoToGif(file.path,
-            startTime: 0, duration: 5);
+        final info = await _flutterVideoCompress.convertVideoToGif(
+          file.path,
+          startTime: 0,
+          duration: 5,
+        );
 
         print(info.path);
         setState(() {
@@ -99,8 +103,13 @@ class _MyAppState extends State<MyApp> {
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
     // final _list = <Widget>[
-    //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
-    //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      // FlatButton(child: Text('take video'), onPressed: _videoPicker),
+      // FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      // FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
+      // FlatButton(
+      //   child: Text('convert video to gif'),
+      //   onPressed: _convertVideoToGif,
+      // ),
     // ];
     // if (_image != null) {
     //   _list.add(Flexible(child: Image.memory(_image)));
@@ -111,9 +120,11 @@ class _MyAppState extends State<MyApp> {
     final _list = [
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
       FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
-      FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
+      FlatButton(child: Text('get media info'), onPressed: _getMediaInfo),
       FlatButton(
-          child: Text('convert video to gif'), onPressed: _convertVideoToGif),
+        child: Text('convert video to gif'),
+        onPressed: _convertVideoToGif,
+      ),
       if (_imageFile != null)
         Flexible(child: Image.file(_imageFile))
       else

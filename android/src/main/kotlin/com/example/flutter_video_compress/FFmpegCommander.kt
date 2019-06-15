@@ -29,12 +29,13 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
         if (dir != null && !dir.exists()) dir.mkdirs()
 
         val file = File(dir, path.substring(path.lastIndexOf("/")))
-        utility.deleteExists(file)
+        utility.deleteFile(file)
 
-        val crf = 28 - quality * 3
-
-        val cmd = arrayOf("-i", path, "-vcodec", "h264", "-crf", "$crf",
-                "-acodec", "aac", file.absolutePath)
+        val cmd = if (quality > 0) {
+            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-vf", utility.getScaleByQuality(quality), "-acodec", "aac", file.absolutePath)
+        } else {
+            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", file.absolutePath)
+        }
 
         this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
             override fun onProgress(message: String) {
@@ -89,7 +90,7 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
 
 
         val file = File(dir, utility.getFileNameWithGifExtension(path))
-        utility.deleteExists(file)
+        utility.deleteFile(file)
 
         val cmd = arrayOf("-i", path, "-ss", startTime.toString(), "-t", gifDuration.toString(),
                 "-vf", "scale=640:-2", file.absolutePath)

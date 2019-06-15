@@ -30,7 +30,7 @@ class ThumbnailUtility(channelName: String) {
 
         val file = File(dir, path.substring(path.lastIndexOf('/'),
                 path.lastIndexOf('.')) + ".jpg")
-        utility.deleteExists(file)
+        utility.deleteFile(file)
 
         val stream = ByteArrayOutputStream()
         bmp.compress(Bitmap.CompressFormat.JPEG, quality, stream)

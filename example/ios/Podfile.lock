@@ -2,15 +2,15 @@ PODS:
   - Flutter (1.0.0)
   - flutter_video_compress (0.3.0):
     - Flutter
+    - Regift
   - image_picker (0.0.1):
     - Flutter
   - Regift (1.5.0)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios-release`)
+  - Flutter (from `.symlinks/flutter/ios`)
   - flutter_video_compress (from `.symlinks/plugins/flutter_video_compress/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - Regift
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -18,7 +18,7 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios-release"
+    :path: ".symlinks/flutter/ios"
   flutter_video_compress:
     :path: ".symlinks/plugins/flutter_video_compress/ios"
   image_picker:
@@ -26,10 +26,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
-  flutter_video_compress: 17f3a9ded3aa398b8ea01439bbcbd60764d3dec9
+  flutter_video_compress: 02c449d903eea5374067e74533858524bce7fb35
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
   Regift: d097afd401021f4f42b102ee125ceeb125a38caf
 
-PODFILE CHECKSUM: 1b4293935cb7d5f16a71bd358f4c9a58bea54c3a
+PODFILE CHECKSUM: 10d151ff31cc49b04a38b583192fd55209f727f7
 
 COCOAPODS: 1.7.0.beta.2

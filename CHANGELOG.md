@@ -1,3 +1,11 @@
+## 0.3.5
+* **Breaking change** fix The old version does not scale the Android compressed video,
+  That is, the startCompress [quality] properties has no effect.
+* fix IOS pod dependency `Regift`
+* feat enum `VideoQuality` add DefaultQuality, startCompress [quality] Use the default properties of the old version
+* fix IOS convertVideoToGif file Suffix
+* docs update example
+
 ## 0.3.4+1
 * fix example lost the IOS pod dependency `Regift`
 

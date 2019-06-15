@@ -10,7 +10,7 @@ import java.io.File
 
 class Utility(private val channelName: String) {
 
-    fun deleteExists(file: File) {
+    fun deleteFile(file: File) {
         if (file.exists()) {
             file.delete()
         }
@@ -108,5 +108,12 @@ class Utility(private val channelName: String) {
             }
         }
         return fileName
+    }
+
+    fun getScaleByQuality(quality: Int): String = when (quality) {
+        1 -> "scale=128:-2"
+        2 -> "scale=320:-2"
+        3 -> "scale=1080:-2"
+        else -> "scale=128:-2"
     }
 }

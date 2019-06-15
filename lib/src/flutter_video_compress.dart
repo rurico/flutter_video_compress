@@ -185,7 +185,7 @@ class FlutterVideoCompress {
   /// ```
   Future<MediaInfo> startCompress(
     String path, {
-    VideoQuality quality = VideoQuality.LowQuality,
+    VideoQuality quality = VideoQuality.DefaultQuality,
     bool deleteOrigin = false,
   }) async {
     assert(path != null);

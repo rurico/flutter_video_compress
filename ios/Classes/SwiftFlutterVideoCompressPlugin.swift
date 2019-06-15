@@ -194,9 +194,17 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         case 0:
             return AVAssetExportPresetLowQuality
         case 1:
-            return AVAssetExportPresetMediumQuality
+            return AVAssetExportPresetLowQuality
         case 2:
+            return AVAssetExportPresetMediumQuality
+        case 3:
             return AVAssetExportPresetHighestQuality
+        case 4:
+            if #available(iOS 11.0, *) {
+                return AVAssetExportPresetHEVCHighestQuality
+            } else {
+                return AVAssetExportPresetHighestQuality
+            }
         default:
             return AVAssetExportPresetLowQuality
         }
@@ -207,15 +215,19 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         return path
     }
     
+    private func getFileName(_ path: String)->String {
+        return String(path[path.lastIndex(of: "/")!..<path.lastIndex(of: ".")!])
+    }
+    
+    
     private func startCompress(_ path: String,_ quality: NSNumber,_ deleteOrigin: Bool,_ result: @escaping FlutterResult) {
         let url = URL(fileURLWithPath: excludeFileProtocol(path))
         let asset = AVAsset(url: url)
         asset.tracks(withMediaType: AVMediaType.video)
         
-        let fileName = url.deletingPathExtension().lastPathComponent
         let fileType = url.pathExtension
         
-        let destinationPath: String = "\(initFolder())/\(fileName).\(fileType)"
+        let destinationPath: String = "\(initFolder())\(getFileName(path)).\(fileType)"
         let newVideoPath = URL(fileURLWithPath: destinationPath)
         deleteExists(newVideoPath)
         
@@ -263,8 +275,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         stopCommand = true
     }
     
-    private func convertVideoToGif(_ path: String,_ startTime: NSNumber,_ endTime: NSNumber, _     duration:NSNumber,
-                           _ result: FlutterResult) {
+    private func convertVideoToGif(_ path: String,_ startTime: NSNumber,_ endTime: NSNumber, _     duration:NSNumber, _ result: FlutterResult) {
         let gifStartTime = Float(truncating: startTime)
         var gifDuration = Float(truncating: 0)
         
@@ -276,15 +287,14 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
                 gifDuration  = Float(Float(truncating: endTime) - gifStartTime)
             }
         } else {
-            gifDuration = Float(truncating:     duration)
+            gifDuration = Float(truncating: duration)
         }
         
         let frameRate = Int(15)
         let loopCount = Int(0)
         
         let sourceFileURL = URL(fileURLWithPath: path)
-        let temporaryFile = (NSTemporaryDirectory() as NSString).appendingPathComponent(sourceFileURL.lastPathComponent)
-        let destinationUrl = URL(fileURLWithPath: temporaryFile)
+        let destinationUrl = URL(fileURLWithPath: "\(initFolder())\(getFileName(path)).gif")
         
         let trimmedRegift = Regift(sourceFileURL: sourceFileURL, destinationFileURL: destinationUrl,
                                    startTime: gifStartTime, duration: gifDuration, frameRate: frameRate,
