@@ -20,8 +20,8 @@ class ThumbnailUtility(channelName: String) {
         result.success(byteArray.toList().toByteArray())
     }
 
-    fun getThumbnailWithFile(path: String, quality: Int, position: Long,
-                             result: MethodChannel.Result, context: Context) {
+    fun getThumbnailWithFile(context: Context, path: String, quality: Int, position: Long,
+                             result: MethodChannel.Result) {
         val bmp = utility.getBitmap(path, position, result)
 
         val dir = context.getExternalFilesDir("flutter_video_compress")

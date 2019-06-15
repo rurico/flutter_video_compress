@@ -37,12 +37,12 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 val path = call.argument<String>("path")!!
                 val quality = call.argument<Int>("quality")!!
                 val position = call.argument<Long>("position")!!
-                ThumbnailUtility(channelName).getThumbnailWithFile(path, quality, position, result,
-                        reg.context())
+                ThumbnailUtility(channelName).getThumbnailWithFile(reg.context(), path, quality,
+                        position, result)
             }
             "getMediaInfo" -> {
                 val path = call.argument<String>("path")!!
-                result.success(utility.getMediaInfoJson(path, reg.context()).toString())
+                result.success(utility.getMediaInfoJson(reg.context(), path).toString())
             }
             "startCompress" -> {
                 val path = call.argument<String>("path")!!
@@ -70,7 +70,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
 
     private fun initFfmpegCommanderIfNeeded() {
         if (ffmpegCommander == null) {
-            ffmpegCommander = FFmpegCommander(channelName, reg.context())
+            ffmpegCommander = FFmpegCommander(reg.context(), channelName)
         }
     }
 }

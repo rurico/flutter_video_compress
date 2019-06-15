@@ -275,7 +275,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         stopCommand = true
     }
     
-    private func convertVideoToGif(_ path: String,_ startTime: NSNumber,_ endTime: NSNumber, _     duration:NSNumber, _ result: FlutterResult) {
+    private func convertVideoToGif(_ path: String,_ startTime: NSNumber,_ endTime: NSNumber, _ duration:NSNumber,
+                           _ result: FlutterResult) {
         let gifStartTime = Float(truncating: startTime)
         var gifDuration = Float(truncating: 0)
         
@@ -302,6 +303,13 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         
         let destinationPath = trimmedRegift.createGif();
         
+        // remove compressed video since it's not anymore needed.
+        do {
+            try FileManager.default.removeItem(at: sourceFileURL)
+        } catch {
+            print("Error while deleting converted video \(sourceFileURL)")
+        }
+
         result(excludeFileProtocol(destinationPath!.absoluteString))
     }
 }
