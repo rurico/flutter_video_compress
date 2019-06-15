@@ -302,13 +302,6 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
                                    loopCount: loopCount, size: nil)
         
         let destinationPath = trimmedRegift.createGif();
-        
-        // remove compressed video since it's not anymore needed.
-        do {
-            try FileManager.default.removeItem(at: sourceFileURL)
-        } catch {
-            print("Error while deleting converted video \(sourceFileURL)")
-        }
 
         result(excludeFileProtocol(destinationPath!.absoluteString))
     }
