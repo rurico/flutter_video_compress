@@ -1,6 +1,13 @@
+## 0.3.4+1
+* fix example lost the IOS pod dependency `Regift`
+
 ## 0.3.4
-* feat add convertVideoToGif api. Cut the video and converts the video to gif.
 * docs update convertVideoToGif associated document
+* feat Created API for conversion of video files to gif with start time
+  and duration parameters.
+  For Android ffmpeg is used for conversion and for iOS Regift
+  library is used.
+  Also, added an example on how to use the API within example project.
 
 ## 0.3.3+3
 * docs update README.md
