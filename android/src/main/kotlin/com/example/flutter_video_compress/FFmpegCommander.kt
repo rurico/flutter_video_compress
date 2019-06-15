@@ -8,7 +8,7 @@ import nl.bravobit.ffmpeg.FFmpeg
 import nl.bravobit.ffmpeg.FFtask
 import java.io.File
 
-class FFmpegCommander(private val channelName: String, private val context: Context) {
+class FFmpegCommander(private val context: Context, private val channelName: String) {
     private var stopCommand = false
     private var ffTask: FFtask? = null
     private val utility = Utility(channelName)
@@ -23,8 +23,7 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
                     "ffmpeg is supported this platform")
         }
 
-        val dir = context.getExternalFilesDir(
-                "flutter_video_compress")
+        val dir = context.getExternalFilesDir("flutter_video_compress")
 
         if (dir != null && !dir.exists()) dir.mkdirs()
 
@@ -45,14 +44,14 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
                     print("FlutterVideoCompress: Video compression has stopped")
                     ffTask?.killRunningProcess()
                     stopCommand = false
-                    val json = utility.getMediaInfoJson(path, context)
+                    val json = utility.getMediaInfoJson(context, path)
                     json.put("isCancel", true)
                     result.success(json.toString())
                 }
             }
 
             override fun onFinish() {
-                val json = utility.getMediaInfoJson(file.absolutePath, context)
+                val json = utility.getMediaInfoJson(context, file.absolutePath)
                 json.put("isCancel", false)
                 result.success(json.toString())
                 if (deleteOrigin) {
@@ -71,10 +70,10 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
                 result.error(channelName, "FlutterVideoCompress Error",
                         "startTime should be greater than startTime")
             } else {
-                gifDuration = (endTime - startTime) * 1000
+                gifDuration = (endTime - startTime)
             }
         } else {
-            gifDuration = duration * 1000
+            gifDuration = duration
         }
 
         val ffmpeg = FFmpeg.getInstance(context)
@@ -93,7 +92,7 @@ class FFmpegCommander(private val channelName: String, private val context: Cont
         utility.deleteFile(file)
 
         val cmd = arrayOf("-i", path, "-ss", startTime.toString(), "-t", gifDuration.toString(),
-                "-vf", "scale=640:-2", file.absolutePath)
+                "-vf", "scale=640:-2", "-r", "15", file.absolutePath)
 
         this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
             override fun onProgress(message: String) {
