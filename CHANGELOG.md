@@ -1,3 +1,6 @@
+## 0.3.5+1
+* reduced frame rate to 15 on android, use milliseconds for duration
+
 ## 0.3.5
 * **Breaking change** fix The old version does not scale the Android compressed video,
   That is, the startCompress [quality] properties has no effect.
