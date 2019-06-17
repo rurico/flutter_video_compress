@@ -18,6 +18,6 @@ A new flutter plugin project.
   s.dependency 'Regift'
 
   s.ios.deployment_target = '8.0'
-  s.swift_version = '4.2'
+  s.swift_version = '5.0'
 end
 
