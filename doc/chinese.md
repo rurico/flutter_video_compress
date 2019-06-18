@@ -63,7 +63,7 @@ dependencies:
 
 **创建一个实例**
 ```dart
-FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+final _flutterVideoCompress = FlutterVideoCompress();
 ```
 
 **从视频文件获得缩略图**

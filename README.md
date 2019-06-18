@@ -62,7 +62,7 @@ dependencies:
 
 **Creating instance.**
 ```dart
-FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+final _flutterVideoCompress = FlutterVideoCompress();
 ```
 
 **Get thumbnail by video file**

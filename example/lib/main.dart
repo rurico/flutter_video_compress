@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+  final _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
   File _imageFile;
   Subscription _subscription;
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
         final MediaInfo info = await _flutterVideoCompress.startCompress(
           file.path,
           deleteOrigin: true,
-          quality: VideoQuality.LowQuality
+          quality: VideoQuality.LowQuality,
         );
         print(info.toJson());
       }
@@ -103,13 +103,13 @@ class _MyAppState extends State<MyApp> {
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
     // final _list = <Widget>[
-      // FlatButton(child: Text('take video'), onPressed: _videoPicker),
-      // FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
-      // FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
-      // FlatButton(
-      //   child: Text('convert video to gif'),
-      //   onPressed: _convertVideoToGif,
-      // ),
+    // FlatButton(child: Text('take video'), onPressed: _videoPicker),
+    // FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+    // FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
+    // FlatButton(
+    //   child: Text('convert video to gif'),
+    //   onPressed: _convertVideoToGif,
+    // ),
     // ];
     // if (_image != null) {
     //   _list.add(Flexible(child: Image.memory(_image)));

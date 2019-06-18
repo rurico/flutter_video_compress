@@ -16,7 +16,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+  final _flutterVideoCompress = FlutterVideoCompress();
   Uint8List _image;
   File _imageFile;
   Subscription _subscription;

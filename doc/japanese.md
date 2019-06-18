@@ -64,7 +64,7 @@ dependencies:
 
 **インスタンスを作成**
 ```dart
-FlutterVideoCompress _flutterVideoCompress = FlutterVideoCompress();
+final _flutterVideoCompress = FlutterVideoCompress();
 ```
 
 **ビデオファイルでサムネイルを取得する**

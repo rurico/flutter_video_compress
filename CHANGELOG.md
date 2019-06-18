@@ -1,3 +1,12 @@
+## 0.3.5+4
+* Support latest dependencies
+
+## 0.3.5+3
+* update documents
+
+## 0.3.5+2
+* increased swift version to 5.0
+
 ## 0.3.5+1
 * reduced frame rate to 15 on android, use milliseconds for duration
 

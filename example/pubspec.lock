@@ -52,14 +52,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.3.5+1"
+    version: "0.3.5+4"
   image_picker:
     dependency: "direct main"
     description:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0+4"
+    version: "0.6.0+9"
   matcher:
     dependency: transitive
     description:
@@ -158,4 +158,4 @@ packages:
     version: "2.0.8"
 sdks:
   dart: ">=2.2.2 <3.0.0"
-  flutter: ">=0.1.4 <2.0.0"
+  flutter: ">=1.5.0 <2.0.0"
