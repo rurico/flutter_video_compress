@@ -187,8 +187,8 @@ class FlutterVideoCompress {
     }
     _isCompressing = true;
     if (compressProgress$._notSubscribed) {
-      debugPrint("""FlutterVideoCompress: You can try to subscribe to the 
-      compressProgress\$ stream to know the compressing state.""");
+      debugPrint('''FlutterVideoCompress: You can try to subscribe to the 
+      compressProgress\$ stream to know the compressing state.''');
     }
     final jsonStr = await _invoke<String>('startCompress', {
       'path': path,
