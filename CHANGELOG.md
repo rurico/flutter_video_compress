@@ -1,3 +1,9 @@
+## 0.3.6
+* fix [document] ios swift version documents of how to fix Regift
+* refactor [android] reduce compressing time
+* refactor [android] remove updateProgress redundant code to improve performance
+* refactor [dart] change all print to debugPrint to improve release performance
+
 ## 0.3.5+4
 * Support latest dependencies
 

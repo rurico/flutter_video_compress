@@ -35,6 +35,28 @@ target 'Runner' do
   use_frameworks! # <--- add this
   ...
 end
+
+# -----insert code start-----
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+      if s.name == 'Regift'
+        s.swift_version = '4.0'
+    # elsif s.name == 'other-Plugin'
+    #   s.swift_version = '5.0'
+    # else
+    #   s.swift_version = '4.0'
+      end
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+    end
+  end
+end
+# -----insert code end-----
 ```
 
 ## メソッド

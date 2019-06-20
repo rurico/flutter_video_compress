@@ -4,6 +4,8 @@ platform :ios, '8.0'
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
+pod 'Regift'
+
 project 'Runner', {
   'Debug' => :debug,
   'Profile' => :release,
@@ -60,6 +62,14 @@ target 'Runner' do
     File.symlink(p[:path], symlink)
     pod p[:name], :path => File.join(symlink, 'ios')
   }
+end
+
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+      if s.name == 'Regift'
+        s.swift_version = '4.0'
+      end
+  end
 end
 
 post_install do |installer|

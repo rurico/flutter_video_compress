@@ -12,6 +12,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
     private var stopCommand = false
     private var ffTask: FFtask? = null
     private val utility = Utility(channelName)
+    private var totalTime: Long = 0
 
 
     fun startCompress(path: String, quality: Int, deleteOrigin: Boolean,
@@ -31,9 +32,14 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         utility.deleteFile(file)
 
         val cmd = if (quality > 0) {
-            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-vf", utility.getScaleByQuality(quality), "-acodec", "aac", file.absolutePath)
+            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-b:v", "1000k", "-acodec", "aac",
+                    "-preset", "ultrafast",
+                    "-vf", utility.getScaleByQuality(quality),
+                    file.absolutePath)
         } else {
-            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-acodec", "aac", file.absolutePath)
+            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-b:v", "1000k", "-acodec", "aac",
+                    "-preset", "ultrafast",
+                    file.absolutePath)
         }
 
         this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
@@ -42,11 +48,12 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
 
                 if (stopCommand) {
                     print("FlutterVideoCompress: Video compression has stopped")
-                    ffTask?.killRunningProcess()
                     stopCommand = false
                     val json = utility.getMediaInfoJson(context, path)
                     json.put("isCancel", true)
                     result.success(json.toString())
+                    totalTime = 0
+                    ffTask?.killRunningProcess()
                 }
             }
 
@@ -57,6 +64,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
                 if (deleteOrigin) {
                     File(path).delete()
                 }
+                totalTime = 0
             }
         })
     }
@@ -109,9 +117,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         if ("Duration" in message) {
             val reg = Regex("""Duration: ((\d{2}:){2}\d{2}\.\d{2}).*""")
             val totalTimeStr = message.replace(reg, "$1")
-            val totalTime = utility.timeStrToTimestamp(totalTimeStr.trim())
-            MethodChannel(messenger, channelName).invokeMethod(
-                    "updateProgressTotalTime", totalTime)
+            totalTime = utility.timeStrToTimestamp(totalTimeStr.trim())
         }
 
         if ("frame=" in message) {
@@ -120,7 +126,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
                 val totalTimeStr = message.replace(reg, "$1")
                 val time = utility.timeStrToTimestamp(totalTimeStr.trim())
                 MethodChannel(messenger, channelName)
-                        .invokeMethod("updateProgressTime", time)
+                        .invokeMethod("updateProgress", ((time / totalTime) * 100).toString())
             } catch (e: Exception) {
                 print(e.stackTrace)
             }
