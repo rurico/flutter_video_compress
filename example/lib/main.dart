@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _subscription =
         _flutterVideoCompress.compressProgress$.subscribe((progress) {
-      print('progress: $progress');
+      debugPrint('progress: $progress');
     });
   }
 
@@ -52,18 +53,18 @@ class _MyAppState extends State<MyApp> {
           quality: 50,
           position: -1,
         );
-        print(resultFile.path);
+        debugPrint(resultFile.path);
 
         assert(resultFile.existsSync());
 
-        print('file Exists: ${resultFile.existsSync()}');
+        debugPrint('file Exists: ${resultFile.existsSync()}');
 
         final MediaInfo info = await _flutterVideoCompress.startCompress(
           file.path,
           deleteOrigin: true,
           quality: VideoQuality.LowQuality,
         );
-        print(info.toJson());
+        debugPrint(info.toJson().toString());
       }
     }
   }
@@ -77,7 +78,7 @@ class _MyAppState extends State<MyApp> {
       final file = await ImagePicker.pickVideo(source: ImageSource.gallery);
       if (file?.path != null) {
         final info = await _flutterVideoCompress.getMediaInfo(file.path);
-        print(info.toJson());
+        debugPrint(info.toJson().toString());
       }
     }
   }
@@ -92,7 +93,7 @@ class _MyAppState extends State<MyApp> {
           duration: 5,
         );
 
-        print(info.path);
+        debugPrint(info.path);
         setState(() {
           _imageFile = info;
         });
@@ -102,22 +103,7 @@ class _MyAppState extends State<MyApp> {
 
   List<Widget> _builColumnChildren() {
     // dart 2.3 before
-    // final _list = <Widget>[
-    // FlatButton(child: Text('take video'), onPressed: _videoPicker),
-    // FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
-    // FlatButton(child: Text('getMediaInfo'), onPressed: _getMediaInfo),
-    // FlatButton(
-    //   child: Text('convert video to gif'),
-    //   onPressed: _convertVideoToGif,
-    // ),
-    // ];
-    // if (_image != null) {
-    //   _list.add(Flexible(child: Image.memory(_image)));
-    // }
-    // return _list;
-
-    // dart 2.3
-    final _list = [
+    final _list = <Widget>[
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
       FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
       FlatButton(child: Text('get media info'), onPressed: _getMediaInfo),
@@ -125,12 +111,29 @@ class _MyAppState extends State<MyApp> {
         child: Text('convert video to gif'),
         onPressed: _convertVideoToGif,
       ),
-      if (_imageFile != null)
-        Flexible(child: Image.file(_imageFile))
-      else
-        if (_image != null) Flexible(child: Image.memory(_image))
     ];
+    if (_imageFile != null) {
+      _list.add(Flexible(child: Image.file(_imageFile)));
+    } else if (_image != null) {
+      _list.add(Flexible(child: Image.memory(_image)));
+    }
     return _list;
+
+    // dart 2.3
+    // final _list = [
+    //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
+    //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+    //   FlatButton(child: Text('get media info'), onPressed: _getMediaInfo),
+    //   FlatButton(
+    //     child: Text('convert video to gif'),
+    //     onPressed: _convertVideoToGif,
+    //   ),
+    //   if (_imageFile != null)
+    //     Flexible(child: Image.file(_imageFile))
+    //   else
+    //     if (_image != null) Flexible(child: Image.memory(_image))
+    // ];
+    // return _list;
   }
 
   @override

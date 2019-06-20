@@ -13,21 +13,12 @@ class FlutterVideoCompress {
 
   bool _isCompressing = false;
 
-  int _totalTime = 0;
-
   FlutterVideoCompress._() {
     _channel.setMethodCallHandler(_handleCallback);
   }
 
   Future<void> _handleCallback(MethodCall call) async {
     switch (call.method) {
-      case 'updateProgressTotalTime':
-        _totalTime = call.arguments;
-        break;
-      case 'updateProgressTime':
-        final progress = (call.arguments as int) / _totalTime * 100;
-        _updateProgressState(progress);
-        break;
       case 'updateProgress':
         final progress = double.tryParse(call.arguments);
         _updateProgressState(progress);
@@ -48,7 +39,7 @@ class FlutterVideoCompress {
           ? await _channel.invokeMethod(name, params)
           : await _channel.invokeMethod(name);
     } on PlatformException catch (e) {
-      print('''FlutterVideoCompress Error: 
+      debugPrint('''FlutterVideoCompress Error: 
       Method: $name
       $e''');
     }
@@ -129,7 +120,7 @@ class FlutterVideoCompress {
   ///   startTime: 0,
   ///   duration: 5,
   /// );
-  /// print(file.path);
+  /// debugPrint(file.path);
   /// ```
   Future<File> convertVideoToGif(
     String path, {
@@ -160,7 +151,7 @@ class FlutterVideoCompress {
   /// ## example
   /// ```dart
   /// final info = await _flutterVideoCompress.getMediaInfo(file.path);
-  /// print(info.toJson());
+  /// debugPrint(info.toJson());
   /// ```
   Future<MediaInfo> getMediaInfo(String path) async {
     assert(path != null);
@@ -181,7 +172,7 @@ class FlutterVideoCompress {
   ///   file.path,
   ///   deleteOrigin: true,
   /// );
-  /// print(info.toJson());
+  /// debugPrint(info.toJson());
   /// ```
   Future<MediaInfo> startCompress(
     String path, {
@@ -195,12 +186,15 @@ class FlutterVideoCompress {
       Already have a compression process, you need to wait for the process to finish or stop it''');
     }
     _isCompressing = true;
+    if (compressProgress$._notSubscribed) {
+      debugPrint("""FlutterVideoCompress: You can try to subscribe to the 
+      compressProgress\$ stream to know the compressing state.""");
+    }
     final jsonStr = await _invoke<String>('startCompress', {
       'path': path,
       'quality': quality.index,
       'deleteOrigin': deleteOrigin,
     });
-    _totalTime = 0;
     _isCompressing = false;
     final jsonMap = json.decode(jsonStr);
     return MediaInfo.fromJson(jsonMap);
