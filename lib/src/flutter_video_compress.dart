@@ -176,8 +176,12 @@ class FlutterVideoCompress {
   /// ```
   Future<MediaInfo> startCompress(
     String path, {
-    VideoQuality quality = VideoQuality.DefaultQuality,
+    VideoQuality quality = DEFAULT_QUALITY,
     bool deleteOrigin = false,
+    int startTime,
+    int duration,
+    bool includeAudio,
+    int frameRate,
   }) async {
     assert(path != null);
     if (_isCompressing) {
@@ -192,8 +196,12 @@ class FlutterVideoCompress {
     }
     final jsonStr = await _invoke<String>('startCompress', {
       'path': path,
-      'quality': quality.index,
+      'quality': quality.value,
       'deleteOrigin': deleteOrigin,
+      'startTime': startTime,
+      'duration': duration,
+      'includeAudio': includeAudio,
+      'frameRate': frameRate,
     });
     _isCompressing = false;
     final jsonMap = json.decode(jsonStr);

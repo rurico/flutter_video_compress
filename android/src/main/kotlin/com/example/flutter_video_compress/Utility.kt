@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import org.json.JSONObject
 import java.io.File
@@ -43,6 +44,11 @@ class Utility(private val channelName: String) {
         val width = java.lang.Long.parseLong(widthStr)
         val height = java.lang.Long.parseLong(heightStr)
         val filesize = file.length()
+        val orientation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
+        } else {
+            null
+        }
 
         val json = JSONObject()
 
@@ -55,6 +61,9 @@ class Utility(private val channelName: String) {
         json.put("height", height)
         json.put("duration", duration)
         json.put("filesize", filesize)
+        if (orientation != null) {
+            json.put("orientation", orientation)
+        }
 
         return json
     }
@@ -108,12 +117,5 @@ class Utility(private val channelName: String) {
             }
         }
         return fileName
-    }
-
-    fun getScaleByQuality(quality: Int): String = when (quality) {
-        1 -> "scale=128:-2"
-        2 -> "scale=320:-2"
-        3 -> "scale=1080:-2"
-        else -> "scale=128:-2"
     }
 }

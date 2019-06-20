@@ -15,13 +15,15 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
     private var totalTime: Long = 0
 
 
-    fun startCompress(path: String, quality: Int, deleteOrigin: Boolean,
-                      result: MethodChannel.Result, messenger: BinaryMessenger) {
+    fun startCompress(path: String, quality: VideoQuality, deleteOrigin: Boolean,
+                      startTime: Int?, duration: Int? = null, includeAudio: Boolean?,
+                      frameRate: Int?, result: MethodChannel.Result,
+                      messenger: BinaryMessenger) {
         val ffmpeg = FFmpeg.getInstance(context)
 
         if (!ffmpeg.isSupported) {
             return result.error(channelName, "FlutterVideoCompress Error",
-                    "ffmpeg is supported this platform")
+                    "ffmpeg isn't supported this platform")
         }
 
         val dir = context.getExternalFilesDir("flutter_video_compress")
@@ -31,43 +33,75 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         val file = File(dir, path.substring(path.lastIndexOf("/")))
         utility.deleteFile(file)
 
-        val cmd = if (quality > 0) {
-            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-b:v", "1000k", "-acodec", "aac",
-                    "-preset", "ultrafast",
-                    "-vf", utility.getScaleByQuality(quality),
-                    file.absolutePath)
-        } else {
-            arrayOf("-i", path, "-vcodec", "h264", "-crf", "28", "-b:v", "1000k", "-acodec", "aac",
-                    "-preset", "ultrafast",
-                    file.absolutePath)
+        val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28")
+        if (quality.notDefault()) {
+            val mediaInfoJson = utility.getMediaInfoJson(context, path)
+            val orientation = mediaInfoJson.getInt("orientation")
+
+            cmdArray.add("-vf")
+            val scale = quality.getScaleString()
+            if (isLandscapeImage(orientation)) {
+                cmdArray.add("scale=$scale:-2")
+            } else {
+                cmdArray.add("scale=-2:$scale")
+            }
         }
 
-        this.ffTask = ffmpeg.execute(cmd, object : ExecuteBinaryResponseHandler() {
-            override fun onProgress(message: String) {
-                notifyProgress(message, messenger)
+        // Add high bitrate for the highest quality
+        if (quality.isHighQuality()) {
+            cmdArray.addAll(listOf("-preset", "ultrafast", "-b:v", "1000k"))
+        }
 
-                if (stopCommand) {
-                    print("FlutterVideoCompress: Video compression has stopped")
-                    stopCommand = false
-                    val json = utility.getMediaInfoJson(context, path)
-                    json.put("isCancel", true)
-                    result.success(json.toString())
-                    totalTime = 0
-                    ffTask?.killRunningProcess()
-                }
-            }
+        if (startTime != null) {
+            cmdArray.add("-ss")
+            cmdArray.add(startTime.toString())
 
-            override fun onFinish() {
-                val json = utility.getMediaInfoJson(context, file.absolutePath)
-                json.put("isCancel", false)
-                result.success(json.toString())
-                if (deleteOrigin) {
-                    File(path).delete()
-                }
-                totalTime = 0
+            if (duration != null) {
+                cmdArray.add("-t")
+                cmdArray.add(duration.toString())
             }
-        })
+        }
+
+        if (includeAudio != null && !includeAudio) {
+            cmdArray.add("-an")
+        }
+
+        if (frameRate != null) {
+            cmdArray.add("-r")
+            cmdArray.add(frameRate.toString())
+        }
+
+        cmdArray.add(file.absolutePath)
+
+        this.ffTask = ffmpeg.execute(cmdArray.toTypedArray(),
+                object : ExecuteBinaryResponseHandler() {
+                    override fun onProgress(message: String) {
+                        notifyProgress(message, messenger)
+
+                        if (stopCommand) {
+                            print("FlutterVideoCompress: Video compression has stopped")
+                            stopCommand = false
+                            val json = utility.getMediaInfoJson(context, path)
+                            json.put("isCancel", true)
+                            result.success(json.toString())
+                            totalTime = 0
+                            ffTask?.killRunningProcess()
+                        }
+                    }
+
+                    override fun onFinish() {
+                        val json = utility.getMediaInfoJson(context, file.absolutePath)
+                        json.put("isCancel", false)
+                        result.success(json.toString())
+                        if (deleteOrigin) {
+                            File(path).delete()
+                        }
+                        totalTime = 0
+                    }
+                })
     }
+
+    private fun isLandscapeImage(orientation: Int) = orientation != 90 && orientation != 270
 
 
     fun convertVideoToGif(path: String, startTime: Long = 0, endTime: Long, duration: Long,

@@ -41,7 +41,13 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             let path = args!["path"] as! String
             let quality = args!["quality"] as! NSNumber
             let deleteOrigin = args!["deleteOrigin"] as! Bool
-            startCompress(path, quality, deleteOrigin, result)
+            let startTime = args!["startTime"] as? NSNumber
+            let duration = args!["duration"] as? NSNumber
+            let includeAudio = args!["includeAudio"] as? Bool
+            let frameRate = args!["frameRate"] as? NSNumber
+
+            startCompress(path, quality, deleteOrigin, startTime as? Int, duration as? Int, includeAudio,
+                          frameRate as? Int, result)
         case "stopCompress":
             stopCompress()
             result("")
@@ -214,14 +220,18 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     }
     
     
-    private func startCompress(_ path: String,_ quality: NSNumber,_ deleteOrigin: Bool,_ result: @escaping FlutterResult) {
+    private func startCompress(_ path: String,_ quality: NSNumber,_ deleteOrigin: Bool,_ startTime: Int?,
+                               _ duration: Int?,_ includeAudio: Bool?,_ frameRate: Int?,
+                               _ result: @escaping FlutterResult) {
         let url = URL(fileURLWithPath: excludeFileProtocol(path))
         let asset = AVAsset(url: url)
+        
         asset.tracks(withMediaType: AVMediaType.video)
         
         let fileType = url.pathExtension
         
-        let destinationPath: String = "\(initFolder())\(getFileName(path)).\(fileType)"
+        let fileName = (startTime != nil) ? "\(getFileName(path))-\(startTime!)" : getFileName(path)
+        let destinationPath: String = "\(initFolder())\(fileName).\(fileType)"
         let newVideoPath = URL(fileURLWithPath: destinationPath)
         deleteExists(newVideoPath)
         
@@ -231,8 +241,20 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         exporter.outputURL = newVideoPath
         exporter.outputFileType = AVFileType.mp4
         exporter.shouldOptimizeForNetworkUse = true
+        if startTime != nil {
+            let timescale = Int32(600)
+            let startTimeCMTime = CMTimeMakeWithSeconds(Float64(startTime!), preferredTimescale: timescale)
+            if duration != nil {
+                let durationCMtime = CMTimeMakeWithSeconds(Float64(duration!), preferredTimescale: timescale)
+                exporter.timeRange = CMTimeRangeMake(start: startTimeCMTime, duration: durationCMtime)
+            } else {
+                exporter.timeRange = CMTimeRangeMake(start: startTimeCMTime,
+                                                     duration: kCFNumberPositiveInfinity as! CMTime)
+            }
+        }
         
-        let timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.updateProgress), userInfo: exporter, repeats: true)
+        let timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.updateProgress),
+                                         userInfo: exporter, repeats: true)
         
         exporter.exportAsynchronously(completionHandler: {
             if(self.stopCommand) {
@@ -274,7 +296,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let gifStartTime = Float(truncating: startTime)
         var gifDuration = Float(truncating: 0)
         
-        if gifStartTime > 0 {
+        if endTime as! Int > 0 {
             if startTime.intValue > endTime.intValue {
                 result(FlutterError(code: channelName, message: "startTime should preceed endTime",
                 details: nil))
