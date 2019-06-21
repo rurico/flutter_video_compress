@@ -23,8 +23,10 @@ class _MyAppState extends State<MyApp> {
 
   MediaInfo _originalVideoInfo = MediaInfo(path: '');
   MediaInfo _compressedVideoInfo = MediaInfo(path: '');
+  MediaInfo _videoPreviewInfo = MediaInfo(path: '');
 
-  StreamController<bool> _loadingStreamCtrl = StreamController<bool>.broadcast();
+  StreamController<bool> _loadingStreamCtrl =
+      StreamController<bool>.broadcast();
 
   @override
   void initState() {
@@ -50,7 +52,7 @@ class _MyAppState extends State<MyApp> {
     print('[Compressing Video] start');
     await _flutterVideoCompress
         .startCompress(videoFile.path,
-            quality: VideoQuality.DefaultQuality, deleteOrigin: false)
+            quality: DEFAULT_QUALITY, deleteOrigin: false)
         .then((MediaInfo compressedVideoInfo) async {
       print(
           '[Compressing Video] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
@@ -74,7 +76,7 @@ class _MyAppState extends State<MyApp> {
           _startDateTime = DateTime.now();
           print('[Getting Gif File] start');
           await _flutterVideoCompress
-              .convertVideoToGif(videoFile.path, startTime: 0, endTime: 5)
+              .convertVideoToGif(videoFile.path, startTime: 0, duration: 5)
               .then((File gifFile) async {
             print(
                 '[Getting Gif File] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
@@ -82,13 +84,27 @@ class _MyAppState extends State<MyApp> {
             await _flutterVideoCompress
                 .getMediaInfo(videoFile.path)
                 .then((MediaInfo videoInfo) async {
-              setState(() {
-                _thumbnailUint8ListImage =
-                    Image.memory(thumbnailUint8ListImage);
-                _thumbnailFileImage = Image.file(thumbnailFile);
-                _gifFileImage = Image.file(gifFile);
-                _originalVideoInfo = videoInfo;
-                _compressedVideoInfo = compressedVideoInfo;
+              _startDateTime = DateTime.now();
+              print('[Compressing video preview] started');
+              await _flutterVideoCompress
+                  .startCompress(videoFile.path,
+                      quality: RES_320,
+                      includeAudio: false,
+                      startTime: 0,
+                      duration: 5,
+                      frameRate: 24)
+                  .then((MediaInfo videoPreviewInfo) async {
+                print(
+                    '[Compressing video preview] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
+                setState(() {
+                  _thumbnailUint8ListImage =
+                      Image.memory(thumbnailUint8ListImage);
+                  _thumbnailFileImage = Image.file(thumbnailFile);
+                  _gifFileImage = Image.file(gifFile);
+                  _originalVideoInfo = videoInfo;
+                  _compressedVideoInfo = compressedVideoInfo;
+                  _videoPreviewInfo = videoPreviewInfo;
+                });
               });
             });
           });
@@ -125,7 +141,7 @@ class _MyAppState extends State<MyApp> {
                         await ImagePicker.pickVideo(source: ImageSource.camera)
                             .then((File videoFile) async {
                           runFlutterVideoCompressMethods(context, videoFile);
-                        runFlutterVideoCompressMethods(context, videoFile);                  
+                          runFlutterVideoCompressMethods(context, videoFile);
                           runFlutterVideoCompressMethods(context, videoFile);
                         });
                       },
@@ -192,6 +208,22 @@ class _MyAppState extends State<MyApp> {
                       child: Text('Gif image from original video')),
                   _gifFileImage != null ? _gifFileImage : Container(),
                   Divider(),
+                  Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+                      child: Text('Video preview')),
+                  Container(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.all(8.0),
+                      child: Text('path: ${_videoPreviewInfo.path}\nduration: '
+                          '${_videoPreviewInfo.duration} microseconds\n'
+                          'size: ${_videoPreviewInfo.filesize} bytes\n'
+                          'size: ${_videoPreviewInfo.width} x '
+                          '${_videoPreviewInfo.height}\n'
+                          'compression cancelled: '
+                          '${_videoPreviewInfo.isCancel}\n'
+                          'author: ${_videoPreviewInfo.author}')),
+                  Divider(),
                 ],
               ),
               StreamBuilder<bool>(
@@ -206,8 +238,6 @@ class _MyAppState extends State<MyApp> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              CircularProgressIndicator(),
-                        CircularProgressIndicator(), 
                               CircularProgressIndicator(),
                               Container(
                                   padding: EdgeInsets.all(8),
