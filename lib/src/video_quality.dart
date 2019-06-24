@@ -7,8 +7,9 @@ class VideoQuality<int> extends Enum<int> {
 const VideoQuality DEFAULT_QUALITY = const VideoQuality(-1);
 const VideoQuality RES_128 = const VideoQuality(0);
 const VideoQuality RES_320 = const VideoQuality(1);
-const VideoQuality RES_640 = const VideoQuality(2);
-const VideoQuality RES_1080 = const VideoQuality(3);
+const VideoQuality RES_480 = const VideoQuality(2);
+const VideoQuality RES_640 = const VideoQuality(3);
+const VideoQuality RES_1080 = const VideoQuality(4);
 
 abstract class Enum<T> {
   final T _value;

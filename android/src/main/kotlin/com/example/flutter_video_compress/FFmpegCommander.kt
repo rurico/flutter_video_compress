@@ -30,8 +30,16 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
 
         if (dir != null && !dir.exists()) dir.mkdirs()
 
-        val file = File(dir, path.substring(path.lastIndexOf("/")))
-        utility.deleteFile(file)
+        val file: File?
+        if (startTime != null && duration != null) {
+            file = File(dir, utility.getFileNameWithPreviewSuffix(path))
+
+        } else {
+            file = File(dir, path.substring(path.lastIndexOf("/")))
+        }
+        if (file.exists()) {
+            utility.deleteFile(file)
+        }
 
         val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28")
         if (quality.notDefault()) {

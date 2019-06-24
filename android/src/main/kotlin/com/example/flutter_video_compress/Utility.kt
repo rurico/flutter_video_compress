@@ -118,4 +118,16 @@ class Utility(private val channelName: String) {
         }
         return fileName
     }
+
+    fun getFileNameWithPreviewSuffix(path: String): String {
+        val file = File(path)
+        var fileName = ""
+        val preview = "-preview"
+
+        if (file.exists()) {
+            val name = file.name
+            fileName = name.substringBeforeLast(".") + preview + "." + name.substringAfterLast(".")
+        }
+        return fileName
+    }
 }

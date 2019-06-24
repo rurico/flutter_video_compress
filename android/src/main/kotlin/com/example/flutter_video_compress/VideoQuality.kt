@@ -4,7 +4,7 @@ enum class VideoQuality(val value : Int) {
     DEFAULT_QUALITY(-1),
     RES_128(0),
     RES_320(1),
-    RES_360(2),
+    RES_480(2),
     RES_640(3),
     RES_1080(4);
 
@@ -15,6 +15,7 @@ enum class VideoQuality(val value : Int) {
     fun getScaleString(): String = when (this) {
         RES_128 -> "128"
         RES_320 -> "320"
+        RES_480 -> "480"
         RES_640 -> "640"
         RES_1080 -> "1080"
         else -> "320"

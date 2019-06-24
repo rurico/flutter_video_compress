@@ -51,9 +51,10 @@ class _MyAppState extends State<MyApp> {
     var _startDateTime = DateTime.now();
     print('[Compressing Video] start');
     await _flutterVideoCompress
-        .startCompress(videoFile.path,
-            quality: DEFAULT_QUALITY, deleteOrigin: false)
+        .startCompress(videoFile.path, quality: RES_640, deleteOrigin: false)
         .then((MediaInfo compressedVideoInfo) async {
+      print(compressedVideoInfo.toJson());
+
       print(
           '[Compressing Video] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
 
@@ -94,6 +95,7 @@ class _MyAppState extends State<MyApp> {
                       duration: 5,
                       frameRate: 24)
                   .then((MediaInfo videoPreviewInfo) async {
+                print(videoPreviewInfo.toJson());
                 print(
                     '[Compressing video preview] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
                 setState(() {
