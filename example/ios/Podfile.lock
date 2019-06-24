@@ -26,7 +26,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   flutter_video_compress: c8ad9a73887a76dd99a38ae86a6397541ca7d117
   image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
   Regift: d097afd401021f4f42b102ee125ceeb125a38caf
