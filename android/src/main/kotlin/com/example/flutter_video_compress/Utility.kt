@@ -11,6 +11,8 @@ import java.io.File
 
 class Utility(private val channelName: String) {
 
+    fun isLandscapeImage(orientation: Int) = orientation != 90 && orientation != 270
+
     fun deleteFile(file: File) {
         if (file.exists()) {
             file.delete()
@@ -41,13 +43,19 @@ class Utility(private val channelName: String) {
         val widthStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)
         val heightStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)
         val duration = java.lang.Long.parseLong(durationStr)
-        val width = java.lang.Long.parseLong(widthStr)
-        val height = java.lang.Long.parseLong(heightStr)
+        var width = java.lang.Long.parseLong(widthStr)
+        var height = java.lang.Long.parseLong(heightStr)
         val filesize = file.length()
         val orientation = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
             retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)
         } else {
             null
+        }
+        val ori = orientation?.toIntOrNull()
+        if (ori != null && isLandscapeImage(ori)) {
+            val tmp = width
+            width = height
+            height = tmp
         }
 
         val json = JSONObject()
@@ -61,8 +69,8 @@ class Utility(private val channelName: String) {
         json.put("height", height)
         json.put("duration", duration)
         json.put("filesize", filesize)
-        if (orientation != null) {
-            json.put("orientation", orientation)
+        if (ori != null) {
+            json.put("orientation", ori)
         }
 
         return json

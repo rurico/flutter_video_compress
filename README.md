@@ -65,8 +65,8 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail file from `[path]`|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(from 0 start), int `[endTime]`, int `[duration]`|converts provided video to a gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video at `[path]`|`[Future<MediaInfo>]`|
-|stopCompress|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video at `[path]`|`[Future<MediaInfo>]`|
+|cancelCompression|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
@@ -125,7 +125,7 @@ print(info.toJson());
 > Compatible with ios in Android and web after compression
 
 ```dart
-final info = await _flutterVideoCompress.startCompress(
+final info = await _flutterVideoCompress.compressVideo(
   file.path,
   deleteOrigin: true,
 );
@@ -141,7 +141,7 @@ _flutterVideoCompress.isCompressing
 > Android will print InterruptedException, but does not affect the use
 
 ```dart
-await _flutterVideoCompress.stopCompress()
+await _flutterVideoCompress.cancelCompression()
 ```
 
 **Subscribe the conversion progress steam**

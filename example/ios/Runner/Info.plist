@@ -47,5 +47,10 @@
 	<string>Example usage description</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Example usage description</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

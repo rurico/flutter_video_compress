@@ -66,8 +66,8 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图文件|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(从0开始), int `[endTime]`, int `[duration]`|将视频转换为gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|从`[path]`获取媒体信息|`[Future<MediaInfo>]`|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
-|stopCompress|`[none]`|停止正在压缩的视频|`[Future<void>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
+|cancelCompression|`[none]`|停止正在压缩的视频|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
@@ -126,7 +126,7 @@ print(info.toJson());
 > 移动端平台及web平台视频格式是兼容的
 
 ```dart
-final info = await _flutterVideoCompress.startCompress(
+final info = await _flutterVideoCompress.compressVideo(
   file.path,
   deleteOrigin: true,
 );
@@ -142,7 +142,7 @@ _flutterVideoCompress.isCompressing
 > Android 会打印 InterruptedException 错误, 但是不会影响使用
 
 ```dart
-await _flutterVideoCompress.stopCompress()
+await _flutterVideoCompress.cancelCompression()
 ```
 
 **订阅转换流**

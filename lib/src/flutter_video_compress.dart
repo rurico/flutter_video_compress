@@ -168,15 +168,15 @@ class FlutterVideoCompress {
   ///
   /// ## example
   /// ```dart
-  /// final info = await _flutterVideoCompress.startCompress(
+  /// final info = await _flutterVideoCompress.compressVideo(
   ///   file.path,
   ///   deleteOrigin: true,
   /// );
   /// debugPrint(info.toJson());
   /// ```
-  Future<MediaInfo> startCompress(
+  Future<MediaInfo> compressVideo(
     String path, {
-    VideoQuality quality = DEFAULT_QUALITY,
+    VideoQuality quality = VideoQuality.DefaultQuality,
     bool deleteOrigin = false,
     int startTime,
     int duration,
@@ -186,7 +186,7 @@ class FlutterVideoCompress {
     assert(path != null);
     if (_isCompressing) {
       throw StateError('''FlutterVideoCompress Error: 
-      Method: startCompress
+      Method: compressVideo
       Already have a compression process, you need to wait for the process to finish or stop it''');
     }
     _isCompressing = true;
@@ -194,9 +194,9 @@ class FlutterVideoCompress {
       debugPrint('''FlutterVideoCompress: You can try to subscribe to the 
       compressProgress\$ stream to know the compressing state.''');
     }
-    final jsonStr = await _invoke<String>('startCompress', {
+    final jsonStr = await _invoke<String>('compressVideo', {
       'path': path,
-      'quality': quality.value,
+      'quality': quality.index,
       'deleteOrigin': deleteOrigin,
       'startTime': startTime,
       'duration': duration,
@@ -213,9 +213,9 @@ class FlutterVideoCompress {
   ///
   /// ## example
   /// ```dart
-  /// await _flutterVideoCompress.stopCompress();
+  /// await _flutterVideoCompress.cancelCompression();
   /// ```
-  Future<void> stopCompress() async {
-    await _invoke<void>('stopCompress');
+  Future<void> cancelCompression() async {
+    await _invoke<void>('cancelCompression');
   }
 }

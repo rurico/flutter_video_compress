@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
 
         debugPrint('file Exists: ${resultFile.existsSync()}');
 
-        final MediaInfo info = await _flutterVideoCompress.startCompress(
+        final MediaInfo info = await _flutterVideoCompress.compressVideo(
           file.path,
           deleteOrigin: true,
           quality: VideoQuality.LowQuality,
@@ -72,8 +72,8 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
-  Future<void> _stopCompress() async {
-    await _flutterVideoCompress.stopCompress();
+  Future<void> _cancelCompression() async {
+    await _flutterVideoCompress.cancelCompression();
   }
 
   Future<void> _getMediaInfo() async {
@@ -108,7 +108,7 @@ class _MyAppState extends State<MyApp> {
     // dart 2.3 before
     final _list = <Widget>[
       FlatButton(child: Text('take video'), onPressed: _videoPicker),
-      FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+      FlatButton(child: Text('stop compress'), onPressed: _cancelCompression),
       FlatButton(child: Text('get media info'), onPressed: _getMediaInfo),
       FlatButton(
         child: Text('convert video to gif'),
@@ -125,7 +125,7 @@ class _MyAppState extends State<MyApp> {
     // dart 2.3
     // final _list = [
     //   FlatButton(child: Text('take video'), onPressed: _videoPicker),
-    //   FlatButton(child: Text('stop compress'), onPressed: _stopCompress),
+    //   FlatButton(child: Text('stop compress'), onPressed: _cancelCompression),
     //   FlatButton(child: Text('get media info'), onPressed: _getMediaInfo),
     //   FlatButton(
     //     child: Text('convert video to gif'),

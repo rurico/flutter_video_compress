@@ -1,3 +1,11 @@
+## 0.3.7
+* **Breaking change** [Both] rename startCompress to compressVideo, stopCompress to cancelCompression
+* feat [Both] compressVideo api add params { int startTime, int duration, bool includeAudio, int frameRate }
+* feat [Both] getMediaInfo returns add orientation
+* fix [android] getMediaInfo returns height and width flipped
+* fix [android] different quality compression size
+* style [example] fixed some problems with example
+
 ## 0.3.6
 * fix [document] ios swift version documents of how to fix Regift
 * refactor [android] reduce compressing time

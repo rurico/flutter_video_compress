@@ -30,13 +30,13 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
             "getThumbnail" -> {
                 val path = call.argument<String>("path")!!
                 val quality = call.argument<Int>("quality")!!
-                val position = call.argument<Long>("position")!!
+                val position = call.argument<Int>("position")!!.toLong()
                 ThumbnailUtility(channelName).getThumbnail(path, quality, position, result)
             }
             "getThumbnailWithFile" -> {
                 val path = call.argument<String>("path")!!
                 val quality = call.argument<Int>("quality")!!
-                val position = call.argument<Long>("position")!!
+                val position = call.argument<Int>("position")!!.toLong()
                 ThumbnailUtility(channelName).getThumbnailWithFile(reg.context(), path, quality,
                         position, result)
             }
@@ -44,7 +44,7 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 val path = call.argument<String>("path")!!
                 result.success(utility.getMediaInfoJson(reg.context(), path).toString())
             }
-            "startCompress" -> {
+            "compressVideo" -> {
                 val path = call.argument<String>("path")!!
                 val quality = call.argument<Int>("quality")!!
                 val deleteOrigin = call.argument<Boolean>("deleteOrigin")!!
@@ -53,18 +53,18 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 val includeAudio = call.argument<Boolean>("includeAudio")
                 val frameRate = call.argument<Int>("frameRate")
 
-                ffmpegCommander?.startCompress(path, VideoQuality.from(quality), deleteOrigin,
+                ffmpegCommander?.compressVideo(path, VideoQuality.from(quality), deleteOrigin,
                         startTime, duration, includeAudio, frameRate, result, reg.messenger())
             }
-            "stopCompress" -> {
-                ffmpegCommander?.stopCompress()
+            "cancelCompression" -> {
+                ffmpegCommander?.cancelCompression()
                 result.success("")
             }
             "convertVideoToGif" -> {
                 val path = call.argument<String>("path")!!
-                val startTime = call.argument<Long>("startTime")!!
-                val endTime = call.argument<Long>("endTime")!!
-                val duration = call.argument<Long>("duration")!!
+                val startTime = call.argument<Int>("startTime")!!.toLong()
+                val endTime = call.argument<Int>("endTime")!!.toLong()
+                val duration = call.argument<Int>("duration")!!.toLong()
 
                 ffmpegCommander?.convertVideoToGif(path, startTime, endTime, duration, result,
                         reg.messenger())

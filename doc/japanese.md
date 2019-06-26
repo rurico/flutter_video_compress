@@ -66,8 +66,8 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|`[path]`からサムネイルのファイルを取得します|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(０から始め), int `[endTime]`, int `[duration]`|ビデオをGIFに変換する|`[Future<File>]`|
 |getMediaInfo|String `[path]`|`[path]`からビデオの情報を取得します|`[Future<MediaInfo>]`|
-|startCompress|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
-|stopCompress|`[none]`|圧縮中のファイルを停止します|`[Future<void>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
+|cancelCompression|`[none]`|圧縮中のファイルを停止します|`[Future<void>]`|
 
 ## サブスクリプション
 |subscription|description|stream|
@@ -127,7 +127,7 @@ print(info.toJson());
 > 圧縮後のアンドロイドおよびウェブとIOSの互換性ある
 
 ```dart
-final info = await _flutterVideoCompress.startCompress(
+final info = await _flutterVideoCompress.compressVideo(
   file.path,
   deleteOrigin: true,
 );
@@ -143,7 +143,7 @@ _flutterVideoCompress.isCompressing
 > アンドロイドはInterruptedExceptionを出力します、使用には影響しません
 
 ```dart
-await _flutterVideoCompress.stopCompress()
+await _flutterVideoCompress.cancelCompression()
 ```
 
 **変換の進行状況をサブスクリプションする**

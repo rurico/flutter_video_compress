@@ -15,10 +15,12 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
     private var totalTime: Long = 0
 
 
-    fun startCompress(path: String, quality: VideoQuality, deleteOrigin: Boolean,
+
+    fun compressVideo(path: String, quality: VideoQuality, deleteOrigin: Boolean,
                       startTime: Int?, duration: Int? = null, includeAudio: Boolean?,
                       frameRate: Int?, result: MethodChannel.Result,
                       messenger: BinaryMessenger) {
+
         val ffmpeg = FFmpeg.getInstance(context)
 
         if (!ffmpeg.isSupported) {
@@ -34,18 +36,23 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         utility.deleteFile(file)
 
         val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28")
-        if (quality.notDefault()) {
+//        if (quality.notDefault()) {
             val mediaInfoJson = utility.getMediaInfoJson(context, path)
             val orientation = mediaInfoJson.getInt("orientation")
 
             cmdArray.add("-vf")
             val scale = quality.getScaleString()
-            if (isLandscapeImage(orientation)) {
+            if (utility.isLandscapeImage(orientation)) {
                 cmdArray.add("scale=$scale:-2")
             } else {
                 cmdArray.add("scale=-2:$scale")
             }
-        }
+//        }
+
+        // Add high bitrate for the highest quality
+//        if (quality.isHighQuality()) {
+            cmdArray.addAll(listOf("-preset", "ultrafast", "-b:v", "1000k"))
+//        }
 
         // Add high bitrate for the highest quality
         if (quality.isHighQuality()) {
@@ -169,7 +176,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         MethodChannel(messenger, channelName).invokeMethod("updateProgress", message)
     }
 
-    fun stopCompress() {
+    fun cancelCompression() {
         if (ffTask != null && !ffTask!!.isProcessCompleted) {
             stopCommand = true
         }

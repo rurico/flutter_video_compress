@@ -6,6 +6,7 @@ class MediaInfo {
   String author;
   int width;
   int height;
+  int orientation;
 
   /// bytes
   int filesize; // filesize
@@ -20,6 +21,7 @@ class MediaInfo {
     this.author,
     this.width,
     this.height,
+    this.orientation,
     this.filesize,
     this.duration,
     this.isCancel,
@@ -32,6 +34,7 @@ class MediaInfo {
     author = json['author'];
     width = json['width'];
     height = json['height'];
+    orientation = json['orientation'];
     filesize = json['filesize'];
     duration = double.tryParse('${json['duration']}');
     isCancel = json['isCancel'];
@@ -45,6 +48,9 @@ class MediaInfo {
     data['author'] = this.author;
     data['width'] = this.width;
     data['height'] = this.height;
+    if (this.orientation != null) {
+      data['orientation'] = this.orientation;
+    }
     data['filesize'] = this.filesize;
     data['duration'] = this.duration;
     if (this.isCancel != null) {
