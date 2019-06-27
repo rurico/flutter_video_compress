@@ -67,7 +67,7 @@ end
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
 |compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|compress video at `[path]`|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
-|deleteAllCache|`[none]`|Delete the cache, please do not put other things in the folder of this plugin, it will be cleared|`[Future<void>]`|
+|deleteAllCache|`[none]`|Delete the cache, please do not put other things in the folder of this plugin, it will be cleared|`[Future<bool>]`|
 
 ## Subscriptions
 |subscription|description|stream|

@@ -1,3 +1,6 @@
+## 0.3.7+3
+* docs deleteAllCache api return whether the boolean value is deleted
+
 ## 0.3.7+2
 * fix `ios` path problem
 * fix `ios` deleteAllCache functional repair

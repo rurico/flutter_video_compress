@@ -166,7 +166,7 @@ class FlutterVideoCompress {
   /// you can choose its quality by [quality],
   /// determine whether to delete his source file by [deleteOrigin]
   /// optional parameters [startTime] [duration] [includeAudio] [frameRate]
-  /// 
+  ///
   /// ## example
   /// ```dart
   /// final info = await _flutterVideoCompress.compressVideo(
@@ -220,14 +220,14 @@ class FlutterVideoCompress {
     await _invoke<void>('cancelCompression');
   }
 
-  /// delete the cache folder, please do not put other things 
+  /// delete the cache folder, please do not put other things
   /// in the folder of this plugin, it will be cleared
-  /// 
+  ///
   /// ## example
   /// ```dart
   /// await _flutterVideoCompress.deleteAllCache();
   /// ```
-  Future<void> deleteAllCache() async {
-    await _invoke<void>('deleteAllCache');
+  Future<bool> deleteAllCache() async {
+    return await _invoke<bool>('deleteAllCache');
   }
 }

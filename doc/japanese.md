@@ -68,7 +68,7 @@ end
 |getMediaInfo|String `[path]`|`[path]`からビデオの情報を取得します|`[Future<MediaInfo>]`|
 |compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|圧縮中のファイルを停止します|`[Future<void>]`|
-|deleteAllCache|`[none]`|キャッシュを削除し、このプラグインのフォルダに他のものを入れないでください、それはクリアされます|`[Future<void>]`|
+|deleteAllCache|`[none]`|キャッシュを削除し、このプラグインのフォルダに他のものを入れないでください、それはクリアされます|`[Future<bool>]`|
 
 ## サブスクリプション
 |subscription|description|stream|

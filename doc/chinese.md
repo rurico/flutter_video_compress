@@ -68,7 +68,7 @@ end
 |getMediaInfo|String `[path]`|从`[path]`获取媒体信息|`[Future<MediaInfo>]`|
 |compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|停止正在压缩的视频|`[Future<void>]`|
-|deleteAllCache|`[none]`|删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除|`[Future<void>]`|
+|deleteAllCache|`[none]`|删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除|`[Future<bool>]`|
 
 ## Subscriptions
 |subscription|description|stream|
