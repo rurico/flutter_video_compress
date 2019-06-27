@@ -35,7 +35,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         val file = File(dir, path.substring(path.lastIndexOf("/")))
         utility.deleteFile(file)
 
-        val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28")
+        val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28", "-movflags", "use_metadata_tags")
 //        if (quality.notDefault()) {
             val mediaInfoJson = utility.getMediaInfoJson(context, path)
             val orientation = mediaInfoJson.getInt("orientation")
@@ -53,11 +53,6 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
 //        if (quality.isHighQuality()) {
             cmdArray.addAll(listOf("-preset", "ultrafast", "-b:v", "1000k"))
 //        }
-
-        // Add high bitrate for the highest quality
-        if (quality.isHighQuality()) {
-            cmdArray.addAll(listOf("-preset", "ultrafast", "-b:v", "1000k"))
-        }
 
         if (startTime != null) {
             cmdArray.add("-ss")

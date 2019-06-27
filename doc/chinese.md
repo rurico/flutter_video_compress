@@ -66,8 +66,9 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图文件|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(从0开始), int `[endTime]`, int `[duration]`|将视频转换为gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|从`[path]`获取媒体信息|`[Future<MediaInfo>]`|
-|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|停止正在压缩的视频|`[Future<void>]`|
+|deleteAllCache|`[none]`|删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
@@ -143,6 +144,13 @@ _flutterVideoCompress.isCompressing
 
 ```dart
 await _flutterVideoCompress.cancelCompression()
+```
+
+**删除所有缓存文件**
+> 删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除
+
+```dart
+await _flutterVideoCompress.deleteAllCache()
 ```
 
 **订阅转换流**

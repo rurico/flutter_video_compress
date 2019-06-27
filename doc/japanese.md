@@ -66,8 +66,9 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|`[path]`からサムネイルのファイルを取得します|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(０から始め), int `[endTime]`, int `[duration]`|ビデオをGIFに変換する|`[Future<File>]`|
 |getMediaInfo|String `[path]`|`[path]`からビデオの情報を取得します|`[Future<MediaInfo>]`|
-|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|`[path]`でビデオを圧縮する|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|圧縮中のファイルを停止します|`[Future<void>]`|
+|deleteAllCache|`[none]`|キャッシュを削除し、このプラグインのフォルダに他のものを入れないでください、それはクリアされます|`[Future<void>]`|
 
 ## サブスクリプション
 |subscription|description|stream|
@@ -144,6 +145,13 @@ _flutterVideoCompress.isCompressing
 
 ```dart
 await _flutterVideoCompress.cancelCompression()
+```
+
+**すべてのキャッシュファイルを削除する**
+> キャッシュを削除し、このプラグインのフォルダに他のものを入れないでください、それはクリアされます
+
+```dart
+await _flutterVideoCompress.deleteAllCache()
 ```
 
 **変換の進行状況をサブスクリプションする**

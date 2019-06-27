@@ -53,6 +53,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             let endTime = args!["endTime"] as! NSNumber
             let duration = args!["duration"] as! NSNumber
             convertVideoToGif(path, startTime, endTime, duration, result)
+        case "deleteAllCache":
+            Utility.deleteFile(Utility.basePath())
         default:
             result(FlutterMethodNotImplemented)
         }

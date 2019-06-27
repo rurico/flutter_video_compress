@@ -218,4 +218,10 @@ class FlutterVideoCompress {
   Future<void> cancelCompression() async {
     await _invoke<void>('cancelCompression');
   }
+
+  /// delete the cache folder, please do not put other things 
+  /// in the folder of this plugin, it will be cleared
+  Future<void> deleteAllCache() async {
+    await _invoke<void>('deleteAllCache');
+  }
 }

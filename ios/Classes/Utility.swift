@@ -48,12 +48,8 @@ class Utility: NSObject {
     
     static func deleteFile(_ path: String) {
         let url = getPathUrl(path)
-        do {
-            if fileManager.fileExists(atPath: url.absoluteString) {
-                try fileManager.removeItem(at: url)
-            }
-        } catch {
-            print(error)
+        if fileManager.fileExists(atPath: url.absoluteString) {
+            try? fileManager.removeItem(at: url)
         }
     }
 }

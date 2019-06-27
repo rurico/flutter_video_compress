@@ -65,8 +65,9 @@ end
 |getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|get thumbnail file from `[path]`|`[Future<File>]`|
 |convertVideoToGif|String `[path]`, int `[startTime]`(from 0 start), int `[endTime]`, int `[duration]`|converts provided video to a gif|`[Future<File>]`|
 |getMediaInfo|String `[path]`|get media information from `[path]`|`[Future<MediaInfo>]`|
-|compressVideo|String `[path]`, VideoQuality `[quality]` ,bool `[deleteOrigin]`|compress video at `[path]`|`[Future<MediaInfo>]`|
+|compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|compress video at `[path]`|`[Future<MediaInfo>]`|
 |cancelCompression|`[none]`|stop compressing the file that is currently being compressed.|`[Future<void>]`|
+|deleteAllCache|`[none]`|Delete the cache, please do not put other things in the folder of this plugin, it will be cleared|`[Future<void>]`|
 
 ## Subscriptions
 |subscription|description|stream|
@@ -142,6 +143,13 @@ _flutterVideoCompress.isCompressing
 
 ```dart
 await _flutterVideoCompress.cancelCompression()
+```
+
+**delete all cache file**
+> Delete the cache, please do not put other things in the folder of this plugin, it will be cleared
+
+```dart
+await _flutterVideoCompress.deleteAllCache()
 ```
 
 **Subscribe the conversion progress steam**

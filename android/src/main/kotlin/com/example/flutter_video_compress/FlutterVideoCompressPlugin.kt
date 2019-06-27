@@ -69,6 +69,9 @@ class FlutterVideoCompressPlugin : MethodCallHandler {
                 ffmpegCommander?.convertVideoToGif(path, startTime, endTime, duration, result,
                         reg.messenger())
             }
+            "deleteAllCache" -> {
+                utility.deleteAllCache(reg.context(), result)
+            }
             else -> result.notImplemented()
         }
     }

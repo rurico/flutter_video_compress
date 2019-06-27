@@ -1,3 +1,6 @@
+## 0.3.7+1
+* feat [Both] add api deleteAllCache to delete cache, please do not put other things in the folder of this plugin, it will be cleared
+
 ## 0.3.7
 * **Breaking change** [Both] rename startCompress to compressVideo, stopCompress to cancelCompression
 * feat [Both] compressVideo api add params { int startTime, int duration, bool includeAudio, int frameRate }

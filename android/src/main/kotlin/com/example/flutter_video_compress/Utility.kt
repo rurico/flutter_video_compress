@@ -52,11 +52,11 @@ class Utility(private val channelName: String) {
             null
         }
         val ori = orientation?.toIntOrNull()
-        if (ori != null && isLandscapeImage(ori)) {
-            val tmp = width
-            width = height
-            height = tmp
-        }
+//        if (ori != null && isLandscapeImage(ori)) {
+//            val tmp = width
+//            width = height
+//            height = tmp
+//        }
 
         val json = JSONObject()
 
@@ -125,5 +125,10 @@ class Utility(private val channelName: String) {
             }
         }
         return fileName
+    }
+
+    fun deleteAllCache(context: Context, result: MethodChannel.Result) {
+        val dir = context.getExternalFilesDir("flutter_video_compress")
+        result.success(dir?.deleteRecursively())
     }
 }

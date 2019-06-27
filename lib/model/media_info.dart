@@ -6,6 +6,7 @@ class MediaInfo {
   String author;
   int width;
   int height;
+  /// [Android] API level 17
   int orientation;
 
   /// bytes
