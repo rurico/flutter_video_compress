@@ -15,7 +15,6 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
     private var totalTime: Long = 0
 
 
-
     fun compressVideo(path: String, quality: VideoQuality, deleteOrigin: Boolean,
                       startTime: Int?, duration: Int? = null, includeAudio: Boolean?,
                       frameRate: Int?, result: MethodChannel.Result,
@@ -35,23 +34,12 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
         val file = File(dir, path.substring(path.lastIndexOf("/")))
         utility.deleteFile(file)
 
-        val cmdArray = mutableListOf("-i", path, "-vcodec", "h264", "-crf", "28", "-movflags", "use_metadata_tags")
-//        if (quality.notDefault()) {
-            val mediaInfoJson = utility.getMediaInfoJson(context, path)
-            val orientation = mediaInfoJson.getInt("orientation")
-
-            cmdArray.add("-vf")
-            val scale = quality.getScaleString()
-            if (utility.isLandscapeImage(orientation)) {
-                cmdArray.add("scale=$scale:-2")
-            } else {
-                cmdArray.add("scale=-2:$scale")
-            }
-//        }
+        val scale = quality.getScaleString()
+        val cmdArray = mutableListOf("-noautorotate", "-i", path, "-vcodec", "h264", "-crf", "28", "-movflags", "+faststart", "-vf", "scale=$scale:-2", "-preset:v", "ultrafast", "-b:v", "1000k")
 
         // Add high bitrate for the highest quality
 //        if (quality.isHighQuality()) {
-            cmdArray.addAll(listOf("-preset", "ultrafast", "-b:v", "1000k"))
+//            cmdArray.addAll(listOf("-preset:v", "ultrafast", "-b:v", "1000k"))
 //        }
 
         if (startTime != null) {

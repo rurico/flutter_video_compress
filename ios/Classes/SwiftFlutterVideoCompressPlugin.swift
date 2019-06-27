@@ -54,7 +54,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
             let duration = args!["duration"] as! NSNumber
             convertVideoToGif(path, startTime, endTime, duration, result)
         case "deleteAllCache":
-            Utility.deleteFile(Utility.basePath())
+            Utility.deleteFile(Utility.basePath(), clear: true)
+            result(true)
         default:
             result(FlutterMethodNotImplemented)
         }
@@ -86,7 +87,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
     
     private func getThumbnailWithFile(_ path: String,_ quality: NSNumber,_ position: NSNumber,_ result: FlutterResult) {
         let fileName = Utility.getFileName(path)
-        let url = Utility.getPathUrl("\(Utility.basePath())\(fileName).jpg")
+        let url = Utility.getPathUrl("\(Utility.basePath())/\(fileName).jpg")
         Utility.deleteFile(path)
         if let bitmap = getBitMap(path,quality,position,result) {
             guard (try? bitmap.write(to: url)) != nil else {
@@ -118,7 +119,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let height = abs(size.height)
         
         let dictionary = [
-            "path":path,
+            "path":Utility.excludeFileProtocol(path),
             "title":title,
             "author":author,
             "width":width,
@@ -177,7 +178,8 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let sourceVideoAsset = avController.getVideoAsset(sourceVideoUrl)
         let sourceVideoTrack = avController.getTrack(sourceVideoAsset)
         
-        let compressionUrl = Utility.getPathUrl("\(Utility.basePath())\(Utility.getFileName(path)).\(sourceVideoType)")
+        let compressionUrl =
+            Utility.getPathUrl("\(Utility.basePath())/\(Utility.getFileName(path)).\(sourceVideoType)")
         
         let timescale = sourceVideoAsset.duration.timescale
         let minStartTime = Double(startTime ?? 0)
@@ -271,7 +273,7 @@ public class SwiftFlutterVideoCompressPlugin: NSObject, FlutterPlugin {
         let loopCount = Int(0)
         
         let sourceFileURL = Utility.getPathUrl(path)
-        let destinationUrl = Utility.getPathUrl("\(Utility.basePath())\(Utility.getFileName(path)).gif")
+        let destinationUrl = Utility.getPathUrl("\(Utility.basePath())/\(Utility.getFileName(path)).gif")
         
         let trimmedRegift = Regift(sourceFileURL: sourceFileURL, destinationFileURL: destinationUrl,
                                    startTime: gifStartTime, duration: gifDuration, frameRate: frameRate,

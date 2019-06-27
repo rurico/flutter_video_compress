@@ -6,6 +6,7 @@ class MediaInfo {
   String author;
   int width;
   int height;
+
   /// [Android] API level 17
   int orientation;
 
@@ -17,7 +18,7 @@ class MediaInfo {
   File file;
 
   MediaInfo({
-    this.path,
+    @required this.path,
     this.title,
     this.author,
     this.width,

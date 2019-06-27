@@ -1,19 +1,25 @@
+## 0.3.7+2
+* fix `ios` path problem
+* fix `ios` deleteAllCache functional repair
+* docs `document` deleteAllCache api description
+* fix `android` ffmpeg keep metadata orientation by -noautorotate command
+
 ## 0.3.7+1
-* feat [Both] add api deleteAllCache to delete cache, please do not put other things in the folder of this plugin, it will be cleared
+* feat `both` add api deleteAllCache to delete cache, please do not put other things in the folder of this plugin, it will be cleared
 
 ## 0.3.7
-* **Breaking change** [Both] rename startCompress to compressVideo, stopCompress to cancelCompression
-* feat [Both] compressVideo api add params { int startTime, int duration, bool includeAudio, int frameRate }
-* feat [Both] getMediaInfo returns add orientation
-* fix [android] getMediaInfo returns height and width flipped
-* fix [android] different quality compression size
-* style [example] fixed some problems with example
+* **Breaking change** `both` rename startCompress to compressVideo, stopCompress to cancelCompression
+* feat `both` compressVideo api add params { int startTime, int duration, bool includeAudio, int frameRate }
+* feat `both` getMediaInfo returns add orientation
+* fix `android` getMediaInfo returns height and width flipped
+* fix `android` different quality compression size
+* style `example` fixed some problems with example
 
 ## 0.3.6
-* fix [document] ios swift version documents of how to fix Regift
-* refactor [android] reduce compressing time
-* refactor [android] remove updateProgress redundant code to improve performance
-* refactor [dart] change all print to debugPrint to improve release performance
+* docs `document` ios swift version documents of how to fix Regift
+* refactor `android` reduce compressing time
+* refactor `android` remove updateProgress redundant code to improve performance
+* refactor `dart` change all print to debugPrint to improve release performance
 
 ## 0.3.5+4
 * Support latest dependencies
@@ -29,9 +35,9 @@
 
 ## 0.3.5
 * **Breaking change** fix The old version does not scale the Android compressed video,
-  That is, the startCompress [quality] properties has no effect.
+  That is, the startCompress `quality` properties has no effect.
 * fix IOS pod dependency `Regift`
-* feat enum `VideoQuality` add DefaultQuality, startCompress [quality] Use the default properties of the old version
+* feat enum `VideoQuality` add DefaultQuality, startCompress `quality` Use the default properties of the old version
 * fix IOS convertVideoToGif file Suffix
 * docs update example
 

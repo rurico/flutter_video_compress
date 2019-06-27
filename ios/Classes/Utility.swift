@@ -46,9 +46,12 @@ class Utility: NSObject {
         return jsonString! as String
     }
     
-    static func deleteFile(_ path: String) {
+    static func deleteFile(_ path: String, clear: Bool = false) {
         let url = getPathUrl(path)
         if fileManager.fileExists(atPath: url.absoluteString) {
+            try? fileManager.removeItem(at: url)
+        }
+        if clear {
             try? fileManager.removeItem(at: url)
         }
     }

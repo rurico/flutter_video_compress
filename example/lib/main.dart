@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_video_compress/flutter_video_compress.dart';
 import 'package:image_picker/image_picker.dart' show ImagePicker, ImageSource;
 import 'package:video_player/video_player.dart';
+import 'my-theme.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MyApp(title: 'Flutter Video Compress Example'));
 
 class MyApp extends StatefulWidget {
+  MyApp({this.title});
+
+  final String title;
+
   @override
   _MyAppState createState() => _MyAppState();
 }
@@ -17,15 +22,11 @@ class _MyAppState extends State<MyApp> {
   final _flutterVideoCompress = FlutterVideoCompress();
   Subscription _subscription;
 
-  Image _thumbnailUint8ListImage;
   Image _thumbnailFileImage;
   Image _gifFileImage;
 
-  VideoPlayerController _controller;
-
   MediaInfo _originalVideoInfo = MediaInfo(path: '');
   MediaInfo _compressedVideoInfo = MediaInfo(path: '');
-  MediaInfo _videoPreviewInfo = MediaInfo(path: '');
 
   final _loadingStreamCtrl = StreamController<bool>.broadcast();
 
@@ -34,7 +35,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _subscription =
         _flutterVideoCompress.compressProgress$.subscribe((progress) {
-      //debugPrint('[Compressing Progress] $progress %');
+      // debugPrint('[Compressing Progress] $progress %');
     });
   }
 
@@ -59,13 +60,7 @@ class _MyAppState extends State<MyApp> {
         '[Compressing Video] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
 
     _startDateTime = DateTime.now();
-    print('[Getting Thumbnail BytesList] start');
-    final thumbnailUint8ListImage =
-        await _flutterVideoCompress.getThumbnail(videoFile.path, quality: 50);
-    print(
-        '[Getting Thumbnail BytesList] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
 
-    _startDateTime = DateTime.now();
     print('[Getting Thumbnail File] start');
     final thumbnailFile = await _flutterVideoCompress
         .getThumbnailWithFile(videoFile.path, quality: 50);
@@ -80,33 +75,54 @@ class _MyAppState extends State<MyApp> {
         '[Getting Gif File] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
 
     final videoInfo = await _flutterVideoCompress.getMediaInfo(videoFile.path);
-    _startDateTime = DateTime.now();
-    print('[Compressing video preview] started');
-    final videoPreviewInfo = await _flutterVideoCompress.compressVideo(
-      videoFile.path,
-      quality: VideoQuality.DefaultQuality,
-      includeAudio: false,
-      startTime: 0,
-      duration: 5,
-      frameRate: 24,
-    );
-    if (_videoPreviewInfo != null && _videoPreviewInfo.file != null) {
-      _controller = VideoPlayerController.file(_videoPreviewInfo.file);
-    }
-    print(
-        '[Compressing video preview] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
+
     setState(() {
-      _thumbnailUint8ListImage = Image.memory(thumbnailUint8ListImage);
       _thumbnailFileImage = Image.file(thumbnailFile);
       _gifFileImage = Image.file(gifFile);
       _originalVideoInfo = videoInfo;
       _compressedVideoInfo = compressedVideoInfo;
-      _videoPreviewInfo = videoPreviewInfo;
     });
     _loadingStreamCtrl.sink.add(false);
   }
 
-  String infoConvert(MediaInfo info) {
+  Widget _buildMaterialWarp(Widget body) {
+    return MaterialApp(
+      title: widget.title,
+      theme: myTheme,
+      home: Scaffold(
+          appBar: AppBar(
+            title: Text(widget.title),
+            actions: <Widget>[
+              IconButton(
+                onPressed: () async {
+                  await _flutterVideoCompress.deleteAllCache();
+                },
+                icon: Icon(Icons.delete_forever),
+              ),
+            ],
+          ),
+          body: body),
+    );
+  }
+
+  Widget _buildRoundedRectangleButton(String text, ImageSource source) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: RaisedButton(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        child: Text(text, style: TextStyle(color: Colors.white)),
+        color: Colors.grey[800],
+        onPressed: () async {
+          final videoFile = await ImagePicker.pickVideo(source: source);
+          if (videoFile != null) {
+            runFlutterVideoCompressMethods(videoFile);
+          }
+        },
+      ),
+    );
+  }
+
+  String _infoConvert(MediaInfo info) {
     return 'path: ${info.path}\n'
         'duration: ${info.duration} microseconds\n'
         'size: ${info.filesize} bytes\n'
@@ -116,145 +132,147 @@ class _MyAppState extends State<MyApp> {
         'author: ${info.author}';
   }
 
+  List<Widget> _buildInfoPanel(String title,
+      {MediaInfo info, Image image, bool isVideoModel = false}) {
+    if (info?.file == null && image == null && !isVideoModel) return [];
+    return [
+      if (!isVideoModel || info?.file != null)
+        Card(
+          child: ListTile(
+            title: Text(title),
+            dense: true,
+          ),
+        ),
+      if (info?.file != null)
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(_infoConvert(info)),
+        ),
+      if (image != null) image,
+      if (isVideoModel && info?.file != null) VideoPlayerView(file: info.file)
+    ];
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Flutter Video Compress Example')),
-        body: Stack(
+  Widget build(context) {
+    return _buildMaterialWarp(
+      Stack(children: <Widget>[
+        ListView(
           children: <Widget>[
-            ListView(
+            const SizedBox(height: 20),
+            _buildRoundedRectangleButton(
+              'Take video from camera with Image Picker',
+              ImageSource.camera,
+            ),
+            _buildRoundedRectangleButton(
+              'Take video from gallery with Image Picker',
+              ImageSource.gallery,
+            ),
+            ..._buildInfoPanel(
+              'Original video information',
+              info: _originalVideoInfo,
+            ),
+            ..._buildInfoPanel(
+              'Original video view',
+              info: _originalVideoInfo,
+              isVideoModel: true,
+            ),
+            ..._buildInfoPanel(
+              'Compressed video information',
+              info: _compressedVideoInfo,
+            ),
+            ..._buildInfoPanel(
+              'Compressed video view',
+              info: _compressedVideoInfo,
+              isVideoModel: true,
+            ),
+            ..._buildInfoPanel(
+              'Thumbnail image from file preview',
+              image: _thumbnailFileImage,
+            ),
+            ..._buildInfoPanel(
+              'Gif image from original video preview',
+              image: _gifFileImage,
+            ),
+          ].expand((widget) {
+            if (widget is SizedBox || widget is Card) {
+              return [widget];
+            }
+            return [widget, const SizedBox(height: 8)];
+          }).toList(),
+        ),
+        Center(),
+      ]),
+    );
+  }
+}
+
+class VideoPlayerView extends StatefulWidget {
+  VideoPlayerView({this.file});
+
+  final File file;
+
+  @override
+  _VideoPlayerViewState createState() => _VideoPlayerViewState();
+}
+
+class _VideoPlayerViewState extends State<VideoPlayerView> {
+  VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(widget.file)
+      ..initialize().then((_) {
+        setState(() {});
+      })
+      ..setVolume(1)
+      ..play();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+
+  @override
+  Widget build(context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _controller.value.isPlaying
+              ? _controller.pause()
+              : _controller.play();
+        });
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Stack(
+              alignment: Alignment.center,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(top: 20),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 32),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: Text(
-                      'Take video from camera with Image Picker',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.grey[800],
-                    onPressed: () async {
-                      final videoFile = await ImagePicker.pickVideo(
-                          source: ImageSource.camera);
-                      if (videoFile != null) {
-                        runFlutterVideoCompressMethods(videoFile);
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.only(left: 32, right: 32, top: 8, bottom: 8),
-                  child: RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    child: Text(
-                      'Take video from gallery with Image Picker',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    color: Colors.grey[800],
-                    onPressed: () async {
-                      final videoFile = await ImagePicker.pickVideo(
-                          source: ImageSource.gallery);
-                      if (videoFile != null) {
-                        runFlutterVideoCompressMethods(videoFile);
-                      }
-                    },
-                  ),
-                ),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Original video')),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(infoConvert(_originalVideoInfo))),
-                Divider(),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Compressed video')),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(infoConvert(_compressedVideoInfo))),
-                Divider(),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Thumbnail image from file')),
-                _thumbnailFileImage != null ? _thumbnailFileImage : Container(),
-                Divider(),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Thumbnail image from bytes list')),
-                _thumbnailUint8ListImage != null
-                    ? _thumbnailUint8ListImage
-                    : Container(),
-                Divider(),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Gif image from original video')),
-                _gifFileImage != null ? _gifFileImage : Container(),
-                Divider(),
-                Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-                    child: Text('Video preview')),
-                Container(
-                    alignment: Alignment.centerLeft,
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(infoConvert(_videoPreviewInfo))),
-                _videoPreviewInfo != null &&
-                        _videoPreviewInfo.file != null &&
-                        _controller != null
-                    ? GestureDetector(
-                        onTap: () {
-                          _controller.value.isPlaying
-                              ? _controller.pause()
-                              : _controller.play();
-                        },
-                        child: AspectRatio(
-                          aspectRatio: _controller.value.aspectRatio,
-                          child: VideoPlayer(_controller),
-                        ),
+                _controller.value.initialized
+                    ? AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
                       )
                     : Container(),
-                Divider(),
+                Icon(
+                  _controller.value.isPlaying ? null : Icons.play_arrow,
+                  size: 80,
+                ),
               ],
             ),
-            StreamBuilder<bool>(
-              stream: _loadingStreamCtrl.stream,
-              builder: (context, AsyncSnapshot<bool> snapshot) {
-                if (snapshot.data == true) {
-                  return Container(
-                    color: Colors.black54,
-                    width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        CircularProgressIndicator(),
-                        Container(
-                          padding: EdgeInsets.all(8),
-                          child: Text('Compressing...'),
-                        )
-                      ],
-                    ),
-                  );
-                }
-                return Container();
-              },
-            )
+            VideoProgressIndicator(
+              _controller,
+              allowScrubbing: true,
+              colors: VideoProgressColors(
+                playedColor: Color.fromRGBO(255, 255, 255, 0.1),
+              ),
+            ),
           ],
         ),
       ),

@@ -147,7 +147,7 @@ await _flutterVideoCompress.cancelCompression()
 ```
 
 **删除所有缓存文件**
-> 删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除
+> 删除这个插件生成的所有文件，我想你应该知道你在做什么
 
 ```dart
 await _flutterVideoCompress.deleteAllCache()

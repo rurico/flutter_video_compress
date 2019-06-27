@@ -148,7 +148,7 @@ await _flutterVideoCompress.cancelCompression()
 ```
 
 **すべてのキャッシュファイルを削除する**
-> キャッシュを削除し、このプラグインのフォルダに他のものを入れないでください、それはクリアされます
+> このプラグインによって生成されたすべてのファイルを削除します、あなたが何をしているか知っておくべきだと思います。
 
 ```dart
 await _flutterVideoCompress.deleteAllCache()
