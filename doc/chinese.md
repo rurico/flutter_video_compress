@@ -7,8 +7,12 @@
   <img alt="license" src="https://img.shields.io/github/license/TenkaiRuri/flutter_video_compress.svg">
 </p>
 
+<div align="center">
+  <img height="500px" alt="flutter compress video" src="https://github.com/TenkaiRuri/flutter_video_compress/raw/master/doc/images/preview.gif"/>
+</div>
+
 ## 语言
-[简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md) [english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md)
+[简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md#flutter_video_compress) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md#flutter_video_compress) [english](https://github.com/TenkaiRuri/flutter_video_compress#flutter_video_compress)
 
 ## 在Android上运行前
 如果你的程序没有启用`AndroidX`，你需要将下列代码添加到你的`android/build.gradle`文件中最后一行

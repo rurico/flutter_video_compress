@@ -1,3 +1,12 @@
+## 0.3.7+6
+* docs better example
+
+## 0.3.7+5
+* docs better example
+
+## 0.3.7+4
+* docs better example
+
 ## 0.3.7+3
 * docs deleteAllCache api return whether the boolean value is deleted
 

@@ -27,6 +27,8 @@ class _MyAppState extends State<MyApp> {
 
   MediaInfo _originalVideoInfo = MediaInfo(path: '');
   MediaInfo _compressedVideoInfo = MediaInfo(path: '');
+  String _taskName;
+  double _progressState = 0;
 
   final _loadingStreamCtrl = StreamController<bool>.broadcast();
 
@@ -35,7 +37,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _subscription =
         _flutterVideoCompress.compressProgress$.subscribe((progress) {
-      // debugPrint('[Compressing Progress] $progress %');
+      setState(() {
+        _progressState = progress;
+      });
     });
   }
 
@@ -51,11 +55,13 @@ class _MyAppState extends State<MyApp> {
 
     var _startDateTime = DateTime.now();
     print('[Compressing Video] start');
+    _taskName = '[Compressing Video]';
     final compressedVideoInfo = await _flutterVideoCompress.compressVideo(
       videoFile.path,
       quality: VideoQuality.DefaultQuality,
       deleteOrigin: false,
     );
+    _taskName = null;
     print(
         '[Compressing Video] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
 
@@ -69,10 +75,12 @@ class _MyAppState extends State<MyApp> {
 
     _startDateTime = DateTime.now();
     print('[Getting Gif File] start');
+    _taskName = '[Getting Gif File]';
     final gifFile = await _flutterVideoCompress
         .convertVideoToGif(videoFile.path, startTime: 0, duration: 5);
     print(
         '[Getting Gif File] done! ${DateTime.now().difference(_startDateTime).inSeconds}s');
+    _taskName = null;
 
     final videoInfo = await _flutterVideoCompress.getMediaInfo(videoFile.path);
 
@@ -201,7 +209,42 @@ class _MyAppState extends State<MyApp> {
             return [widget, const SizedBox(height: 8)];
           }).toList(),
         ),
-        Center(),
+        StreamBuilder<bool>(
+          stream: _loadingStreamCtrl.stream,
+          builder: (context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.data == true) {
+              return GestureDetector(
+                onTap: () {
+                  _flutterVideoCompress.cancelCompression();
+                },
+                child: Card(
+                  child: Container(
+                    color: Colors.black54,
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        CircularProgressIndicator(),
+                        if (_taskName != null)
+                          Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Text('[$_taskName] $_progressState％'),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: const Text('click cancel...'),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+            return Container();
+          },
+        ),
       ]),
     );
   }

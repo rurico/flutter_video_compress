@@ -5,10 +5,16 @@ Compressed video generates a new path, keep the source video or delete it. provi
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
   <img alt="license" src="https://img.shields.io/github/license/TenkaiRuri/flutter_video_compress.svg">
+  <img alt="android min Sdk Version" src="https://img.shields.io/badge/android-16-success.svg?logo=android">
+  <img alt="ios min target" src="https://img.shields.io/badge/ios-8-lightgrey.svg?logo=apple">
 </p>
 
+<div align="center">
+  <img height="500px" alt="flutter compress video" src="https://github.com/TenkaiRuri/flutter_video_compress/raw/master/doc/images/preview.gif"/>
+</div>
+
 ## languages
-[english](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/README.md) [简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md) 
+[english](https://github.com/TenkaiRuri/flutter_video_compress#flutter_video_compress) [简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md#flutter_video_compress) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md#flutter_video_compress) 
 
 ## Before Android installation
 If your program not enabled `AndroidX`, you will need to add the following code to the last line of the `android/build.gradle` file.
