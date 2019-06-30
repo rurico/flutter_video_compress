@@ -5,6 +5,8 @@
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
   <img alt="license" src="https://img.shields.io/github/license/TenkaiRuri/flutter_video_compress.svg">
+  <img alt="android min Sdk Version" src="https://img.shields.io/badge/android-16-success.svg?logo=android">
+  <img alt="ios min target" src="https://img.shields.io/badge/ios-8-lightgrey.svg?logo=apple">
 </p>
 
 <div align="center">
