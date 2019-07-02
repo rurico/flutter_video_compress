@@ -1,6 +1,10 @@
+<!-- Copyright (c) 2019 Amami Ruri -->
+
+<img align="right" src="https://raw.githubusercontent.com/TenkaiRuri/flutter_video_compress/master/doc/images/logo.svg?sanitize=true" height="180px" style="pointer-events: none;cursor: default;">
+
 # flutter_video_compress
 
-在新路径生成新压缩文件，保持源文件或者删除它，提供获取视频信息或者缩略图的函数
+压缩视频生成新路径，选择保留源视频或删除它。从视频路径获取视频缩略图并提供视频信息。方便的处理压缩视频。考虑减少应用程序大小不在IOS中使用FFmpeg
 
 <p align="left">
   <a href="https://pub.dartlang.org/packages/flutter_video_compress"><img alt="pub version" src="https://img.shields.io/pub/v/flutter_video_compress.svg"></a>
@@ -10,81 +14,16 @@
 </p>
 
 <div align="center">
-  <img height="500px" alt="flutter compress video" src="https://github.com/TenkaiRuri/flutter_video_compress/raw/master/doc/images/preview.gif"/>
+  <img height="500px" alt="flutter compress video" style="pointer-events: none;cursor: default;" src="https://github.com/TenkaiRuri/flutter_video_compress/raw/master/doc/images/preview.gif"/>
 </div>
 
 ## 语言
-[简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md#flutter_video_compress) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md#flutter_video_compress) [english](https://github.com/TenkaiRuri/flutter_video_compress#flutter_video_compress)
-
-## 在Android上运行前
-如果你的程序没有启用`AndroidX`，你需要将下列代码添加到你的`android/build.gradle`文件中最后一行
-
-```groovy
-rootProject.allprojects {
-    subprojects {
-        project.configurations.all {
-            resolutionStrategy.eachDependency { details ->
-                if (details.requested.group == 'androidx.core' && !details.requested.name.contains('androidx')) {
-                    details.useVersion "1.0.1"
-                }
-            }
-        }
-    }
-}
-```
-
-## 在IOS上运行前
-如果你的APP支持或者没有开启swift，你需要将下面代码添加到`ios/Podfile`中。[详情](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
-
-```ruby
-target 'Runner' do
-  use_frameworks! # <--- add this
-  ...
-end
-
-# -----insert code start-----
-pre_install do |installer|
-  installer.analysis_result.specifications.each do |s|
-      if s.name == 'Regift'
-        s.swift_version = '4.0'
-    # elsif s.name == 'other-Plugin'
-    #   s.swift_version = '5.0'
-    # else
-    #   s.swift_version = '4.0'
-      end
-  end
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['ENABLE_BITCODE'] = 'NO'
-    end
-  end
-end
-# -----insert code end-----
-```
-
-## 方法
-|function|parameter|description|return|
-|--|--|--|--|
-|getThumbnail|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图|`[Future<Uint8List>]`|
-|getThumbnailWithFile|String `[path]`, int `[quality]`(1-100), int `[position]`|从`[path]`获取缩略图文件|`[Future<File>]`|
-|convertVideoToGif|String `[path]`, int `[startTime]`(从0开始), int `[endTime]`, int `[duration]`|将视频转换为gif|`[Future<File>]`|
-|getMediaInfo|String `[path]`|从`[path]`获取媒体信息|`[Future<MediaInfo>]`|
-|compressVideo|String `[path]`, VideoQuality `[quality]`, bool `[deleteOrigin]`, int `[startTime]`, int `[duration]`, bool `[includeAudio]`, bool `[frameRate]`|在`[path]`生成视频压缩文件|`[Future<MediaInfo>]`|
-|cancelCompression|`[none]`|停止正在压缩的视频|`[Future<void>]`|
-|deleteAllCache|`[none]`|删除缓存，请不要在这个插件的文件夹中放置其他东西，将会被清除|`[Future<bool>]`|
-
-## Subscriptions
-|subscription|description|stream|
-|--|--|--|
-|compressProgress$|订阅转换流(stream)|double `[progress]`|
+[简体中文](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/chinese.md#flutter_video_compress) [日本語](https://github.com/TenkaiRuri/flutter_video_compress/blob/master/doc/japanese.md#flutter_video_compress) [English](https://github.com/TenkaiRuri/flutter_video_compress#flutter_video_compress)
 
 ## 用户指南
 
 **安装**
-添加 [flutter_video_compress](https://pub.dartlang.org/packages/flutter_video_compress) 在你的pubspec.yaml依赖中.
+添加[flutter_video_compress](https://pub.dartlang.org/packages/flutter_video_compress)到你的pubspec.yaml文件中.
 ```yaml
 dependencies:
   flutter_video_compress: ^0.3.x
@@ -95,38 +34,41 @@ dependencies:
 final _flutterVideoCompress = FlutterVideoCompress();
 ```
 
-**从视频文件获得缩略图**
+**获取缩略图**
 ```dart
 final uint8list = await _flutterVideoCompress.getThumbnail(
   file.path,
-  quality: 50,
+  quality: 50, // 默认(100)
+  position: -1 // 默认(-1)
 );
 ```
 
-**从视频文件获得缩略图文件**
+**获取缩略图文件**
 ```dart
 final thumbnailFile = await _flutterVideoCompress.getThumbnailWithFile(
   file.path,
-  quality: 50,
+  quality: 50, // 默认(100)
+  position: -1 // 默认(-1)
 );
 ```
 
-**将视频转换为gif**
+**转换视频为gif**
 ```dart
 final file = await _flutterVideoCompress.convertVideoToGif(
   videoFile.path,
-  startTime: 0,
-  duration: 5,
+  startTime: 0, // 默认(0)
+  duration: 5, // 默认(-1)
+  // endTime: -1 // 默认(-1)
 );
-print(file.path);
+debugPrint(file.path);
 ```
 
 **获取媒体信息**
-> 目前只支持视频
+> 现在支持持视频
 
 ```dart
 final info = await _flutterVideoCompress.getMediaInfo(file.path);
-print(info.toJson());
+debugPrint(info.toJson().toString());
 ```
 
 **压缩视频**
@@ -135,12 +77,13 @@ print(info.toJson());
 ```dart
 final info = await _flutterVideoCompress.compressVideo(
   file.path,
-  deleteOrigin: true,
+  quality: VideoQuality.DefaultQuality, // 默认(VideoQuality.DefaultQuality)
+  deleteOrigin: false, // 默认(false)
 );
-print(info.toJson());
+debugPrint(info.toJson().toString());
 ```
 
-**检查是否处于压缩状态**
+**检查压缩状态**
 ```dart
 _flutterVideoCompress.isCompressing
 ```
@@ -169,7 +112,7 @@ class ... extends State<MyApp> {
     super.initState();
     _subscription =
         _flutterVideoCompress.compressProgress$.subscribe((progress) {
-      print('progress: $progress');
+      debugPrint('progress: $progress');
     });
   }
 
@@ -181,12 +124,28 @@ class ... extends State<MyApp> {
 }
 ```
 
-## 注意事项
-如果你的程序在用了插件后大幅增加体积，你可以采取下面的方式缩减APP体积:
+## 方法
+|Functions|Parameters|Description|Returns|
+|--|--|--|--|
+|getThumbnail|String `path`[视频路径], int `quality`(1-100)[缩略图质量], int `position`[通过位置（时间）获取是缩略图]|从`path`获取缩略图|`Future<Uint8List>`|
+|getThumbnailWithFile|String `path`[视频路径], int `quality`(1-100)[缩略图质量], int `position`[通过位置（时间）获取是缩略图]|从`path`获取缩略图文件`path`|`Future<File>`|
+|convertVideoToGif|String `path`[视频路径], int `startTime`(from 0 start)[转换视频为gif的开始时间], int `endTime`[转换视频为gif的结束时间], int `duration`[从开始时间转换视频为gif的持续时间]|从`path`将视频转换为gif|`Future<File>`|
+|getMediaInfo|String `path`[视频路径]|从`path`获取到视频的媒体信息|`Future<MediaInfo>`|
+|compressVideo|String `path`[视频路径], VideoQuality `quality`[压缩视频质量], bool `deleteOrigin`[是否删除源视频文件], int `startTime`[压缩视频的开始时间], int `duration`[压缩视频的持续时间], bool `includeAudio`[是否包含音频], int `frameRate`[压缩视频帧率]|从`path`压缩视频|`Future<MediaInfo>`|
+|cancelCompression|`none`|取消压缩|`Future<void>`|
+|deleteAllCache|`none`|删除位于'flutter_video_compress'的所有文件|`Future<bool>`|
+
+## 订阅流
+|Subscriptions|Description|Stream|
+|--|--|--|
+|compressProgress$|订阅压缩状态流|double `progress`|
+
+## 注意
+如果你的程序在使用这个插件后体积明显增大，可以使用下面的方法优化你的体积
 
 * 将`x86`相关文件排除 (`./assets`)
 
-* 这个库不使用`ffprobe`，只使用`ffmpeg`，但你的应用程序中仍然有`ffprobe`，你需要排除他 (`asssets/arm` or `assets/x86`)
+* 这个库不使用`ffprobe`，只使用`ffmpeg`，但你的应用中仍然有`ffprobe`，你需要排除他 (`asssets/arm` or `assets/x86`)
 
 将此配置添加到`build.gradle`文件中
 **不要在Android模拟器**上使用**`ignoreAssetsPattern'！X86'`，将会崩溃
@@ -199,10 +158,76 @@ android {
   aaptOptions {
       ignoreAssetsPattern "!x86:!*ffprobe"
   }
-   
+  
   buildTypes {
   ...
-
-  }
+}
 ```
-[详情说明](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)
+[详情](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)
+
+如果你的APP未开启`AndroidX`，你需要将下面代码添加到你的`android/build.gradle`文件里。
+```groovy
+rootProject.allprojects {
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'androidx.core' && !details.requested.name.contains('androidx')) {
+                    details.useVersion "1.0.1"
+                }
+            }
+        }
+    }
+}
+```
+
+如果你的程序不支持swift，你需要在`ios/Podfile`文件加入下例代码。
+```ruby
+target 'Runner' do
+  use_frameworks! # <--- add this
+  ...
+end
+```
+
+[详情](https://github.com/flutter/flutter/issues/16049#issuecomment-382629492)
+
+如果你的程序从未使用过swift的插件，你或许会遇到下面的报错，这时候你需要添加下例代码`ios/Podfile`。
+> The 'Pods-Runner' target has transitive dependencies that include static binaries
+```ruby
+pre_install do |installer|
+  # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
+  Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+```
+[详情](https://github.com/flutter/flutter/issues/16049#issue-309580132)
+
+如果遇到`Regift`报错你可能需要将你的配置文件改成这样
+
+```ruby
+pre_install do |installer|
+  installer.analysis_result.specifications.each do |s|
+      if s.name == 'Regift'
+        s.swift_version = '4.0'
+    # elsif s.name == 'other-Plugin'
+    #   s.swift_version = '5.0'
+    # else
+    #   s.swift_version = '4.0'
+      end
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['ENABLE_BITCODE'] = 'NO'
+    end
+  end
+end
+```
+
+## TODO
+- [ ] 重构代码到objective-c
+
+## 贡献指南
+
+欢迎每一个贡献
+<!-- 首先请查看[贡献指南](contributing.md)。 -->

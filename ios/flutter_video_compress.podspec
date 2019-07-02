@@ -4,6 +4,7 @@
 Pod::Spec.new do |s|
   s.name             = 'flutter_video_compress'
   s.version          = '0.3.0'
+  s.swift_version    = '5.0'
   s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
 A new flutter plugin project.
@@ -19,8 +20,7 @@ A new flutter plugin project.
   s.preserve_paths = 'Regift.framework'
   s.xcconfig = { 'OTHER_LDFLAGS' => '-framework Regift' }
   s.vendored_frameworks = 'Regift.framework'
-
+  
   s.ios.deployment_target = '8.0'
-  s.swift_version = '5.0'
 end
 
