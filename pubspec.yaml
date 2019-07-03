@@ -1,6 +1,6 @@
 name: flutter_video_compress
-description: Generate a new path by compressed video, choose the source video or delete it by a parameter. Get video thumbnail from a video path and provide video information. Easy to deal with compressed video. Considering reduce application size is not using FFmpeg in IOS.
-version: 0.3.7+7
+description: Generate a new file by compressed video, and provide metadata. Get video thumbnail from a video path, supports JPEG/GIF. To reduce app size not using FFmpeg in IOS.
+version: 0.3.7+8
 author: Tenkai Ruri<babichan@outlook.com>
 homepage: https://github.com/TenkaiRuri/flutter_video_compress
 

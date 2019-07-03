@@ -1,3 +1,6 @@
+## 0.3.7+8
+* docs change pubspec.yaml description
+
 ## 0.3.7+7
 * docs Better English documentation
 
