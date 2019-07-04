@@ -169,7 +169,7 @@ android {
 
 ## 問題リスト
 
-アプリケーションが`AndroidX`に対応していない場合は、`android￥build.gradle`ファイルの最後の行に以下のコードを追加する必要があります。```groovy
+アプリケーションが`AndroidX`に対応していない場合は、`android￥build.gradle`ファイルの最後の行に以下のコードを追加する必要があります。
 ```gradle
 rootProject.allprojects {
     subprojects {
