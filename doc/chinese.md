@@ -165,6 +165,8 @@ android {
 ```
 [详情](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)
 
+## 问题列表
+
 如果你的APP未开启`AndroidX`，你需要将下面代码添加到你的`android/build.gradle`文件里。
 ```groovy
 rootProject.allprojects {
@@ -192,25 +194,27 @@ end
 
 如果你的程序从未使用过swift的插件，你或许会遇到下面的报错，这时候你需要添加下例代码`ios/Podfile`。
 > The 'Pods-Runner' target has transitive dependencies that include static binaries
+
 ```ruby
 pre_install do |installer|
   # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
   Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
 end
 ```
+
+**如果上述方法不管用，你可以去报错的仓库提issue，理由是 不能支持swift(Can't support swift)**
+
 [详情](https://github.com/flutter/flutter/issues/16049#issue-309580132)
 
 如果遇到`Regift`报错你可能需要将你的配置文件改成这样
+
+> - `Regift` does not specify a Swift version and none of the targets (`Runner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.
 
 ```ruby
 pre_install do |installer|
   installer.analysis_result.specifications.each do |s|
       if s.name == 'Regift'
         s.swift_version = '4.0'
-    # elsif s.name == 'other-Plugin'
-    #   s.swift_version = '5.0'
-    # else
-    #   s.swift_version = '4.0'
       end
   end
 end
@@ -223,9 +227,6 @@ post_install do |installer|
   end
 end
 ```
-
-## TODO
-- [ ] 重构代码到objective-c
 
 ## 贡献指南
 

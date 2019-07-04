@@ -164,6 +164,8 @@ android {
 ```
 [look detail](https://github.com/bravobit/FFmpeg-Android/wiki/Reduce-APK-File-Size#exclude-architecture)
 
+## Questions
+
 If your application is not enabled `AndroidX`, you will need to add the following code to the last line of the `android/build.gradle` file.
 ```groovy
 rootProject.allprojects {
@@ -192,25 +194,27 @@ end
 
 If your application never used a swift plugin before, maybe you would meet the error, you need to add the following code in `ios/Podfile`.
 > The 'Pods-Runner' target has transitive dependencies that include static binaries
+
 ```ruby
 pre_install do |installer|
   # workaround for https://github.com/CocoaPods/CocoaPods/issues/3289
   Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
 end
 ```
+
+**If the above method not work, you report bug of the error repository. The reason is「can't support swift」**
+
 [look detail](https://github.com/flutter/flutter/issues/16049#issue-309580132)
 
 if show error of `Regift`
+
+> - `Regift` does not specify a Swift version and none of the targets (`Runner`) integrating it have the `SWIFT_VERSION` attribute set. Please contact the author or set the `SWIFT_VERSION` attribute in at least one of the targets that integrate this pod.
 
 ```ruby
 pre_install do |installer|
   installer.analysis_result.specifications.each do |s|
       if s.name == 'Regift'
         s.swift_version = '4.0'
-    # elsif s.name == 'other-Plugin'
-    #   s.swift_version = '5.0'
-    # else
-    #   s.swift_version = '4.0'
       end
   end
 end
@@ -223,9 +227,6 @@ post_install do |installer|
   end
 end
 ```
-
-## TODO
-- [ ] Refactoring ios code to objective-c
 
 ## Contribute
 
