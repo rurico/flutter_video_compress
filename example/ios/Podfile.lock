@@ -2,10 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_video_compress (0.3.0):
     - Flutter
-    - Regift
   - image_picker (0.0.1):
     - Flutter
-  - Regift (1.5.0)
   - video_player (0.0.1):
     - Flutter
 
@@ -13,12 +11,7 @@ DEPENDENCIES:
   - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_video_compress (from `.symlinks/plugins/flutter_video_compress/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
-  - Regift
   - video_player (from `.symlinks/plugins/video_player/ios`)
-
-SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
-    - Regift
 
 EXTERNAL SOURCES:
   Flutter:
