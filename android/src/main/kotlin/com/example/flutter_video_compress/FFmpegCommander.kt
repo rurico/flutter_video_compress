@@ -150,7 +150,7 @@ class FFmpegCommander(private val context: Context, private val channelName: Str
                 val totalTimeStr = message.replace(reg, "$1")
                 val time = utility.timeStrToTimestamp(totalTimeStr.trim())
                 MethodChannel(messenger, channelName)
-                        .invokeMethod("updateProgress", ((time / totalTime) * 100).toString())
+                        .invokeMethod("updateProgress", ((time.toDouble() / totalTime.toDouble()) * 100).toString())
             } catch (e: Exception) {
                 print(e.stackTrace)
             }
