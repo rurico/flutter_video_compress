@@ -12,7 +12,7 @@ void main() => runApp(MyApp(title: 'Flutter Video Compress Example'));
 class MyApp extends StatefulWidget {
   MyApp({this.title});
 
-  final String title;
+  final String? title;
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -20,14 +20,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final _flutterVideoCompress = FlutterVideoCompress();
-  Subscription _subscription;
+  Subscription? _subscription;
 
-  Image _thumbnailFileImage;
-  Image _gifFileImage;
+  Image? _thumbnailFileImage;
+  Image? _gifFileImage;
 
   MediaInfo _originalVideoInfo = MediaInfo(path: '');
   MediaInfo _compressedVideoInfo = MediaInfo(path: '');
-  String _taskName;
+  String? _taskName;
   double _progressState = 0;
 
   final _loadingStreamCtrl = StreamController<bool>.broadcast();
@@ -46,7 +46,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void dispose() {
     super.dispose();
-    _subscription.unsubscribe();
+    _subscription?.unsubscribe();
     _loadingStreamCtrl.close();
   }
 
@@ -95,11 +95,11 @@ class _MyAppState extends State<MyApp> {
 
   Widget _buildMaterialWarp(Widget body) {
     return MaterialApp(
-      title: widget.title,
+      title: widget.title ?? "",
       theme: myTheme,
       home: Scaffold(
           appBar: AppBar(
-            title: Text(widget.title),
+            title: Text(widget.title ?? ""),
             actions: <Widget>[
               IconButton(
                 onPressed: () async {
@@ -121,9 +121,9 @@ class _MyAppState extends State<MyApp> {
         child: Text(text, style: TextStyle(color: Colors.white)),
         color: Colors.grey[800],
         onPressed: () async {
-          final videoFile = await ImagePicker.pickVideo(source: source);
+          final videoFile = await ImagePicker().pickVideo(source: source);
           if (videoFile != null) {
-            runFlutterVideoCompressMethods(videoFile);
+            runFlutterVideoCompressMethods(videoFile as File);
           }
         },
       ),
@@ -141,7 +141,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   List<Widget> _buildInfoPanel(String title,
-      {MediaInfo info, Image image, bool isVideoModel = false}) {
+      {MediaInfo? info, Image? image, bool isVideoModel = false}) {
     if (info?.file == null && image == null && !isVideoModel) return [];
     return [
       if (!isVideoModel || info?.file != null)
@@ -154,10 +154,10 @@ class _MyAppState extends State<MyApp> {
       if (info?.file != null)
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(_infoConvert(info)),
+          child: Text(_infoConvert(info!)),
         ),
       if (image != null) image,
-      if (isVideoModel && info?.file != null) VideoPlayerView(file: info.file)
+      if (isVideoModel && info?.file != null) VideoPlayerView(file: info!.file!)
     ];
   }
 
@@ -253,24 +253,26 @@ class _MyAppState extends State<MyApp> {
 class VideoPlayerView extends StatefulWidget {
   VideoPlayerView({this.file});
 
-  final File file;
+  final File? file;
 
   @override
   _VideoPlayerViewState createState() => _VideoPlayerViewState();
 }
 
 class _VideoPlayerViewState extends State<VideoPlayerView> {
-  VideoPlayerController _controller;
+  late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(widget.file)
-      ..initialize().then((_) {
-        setState(() {});
-      })
-      ..setVolume(1)
-      ..play();
+    if (widget.file != null) {
+      _controller = VideoPlayerController.file(widget.file!)
+        ..initialize().then((_) {
+          setState(() {});
+        })
+        ..setVolume(1)
+        ..play();
+    }
   }
 
   @override
@@ -297,7 +299,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
             Stack(
               alignment: Alignment.center,
               children: <Widget>[
-                _controller.value.initialized
+                _controller.value.isInitialized
                     ? AspectRatio(
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(_controller),
