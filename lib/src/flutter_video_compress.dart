@@ -26,14 +26,14 @@ class FlutterVideoCompress {
     }
   }
 
-  void _updateProgressState(double state) {
+  void _updateProgressState(double? state) {
     if (state != null) {
       compressProgress$.next(state);
     }
   }
 
-  Future<T> _invoke<T>(String name, [Map<String, dynamic> params]) async {
-    T result;
+  Future<T?> _invoke<T>(String name, [Map<String, dynamic>? params]) async {
+    T? result;
     try {
       result = params != null
           ? await _channel.invokeMethod(name, params)
@@ -59,8 +59,8 @@ class FlutterVideoCompress {
   ///   quality: 50,
   /// );
   /// ```
-  Future<Uint8List> getThumbnail(
-    String path, {
+  Future<Uint8List?> getThumbnail(
+    String? path, {
     int quality = 100,
     int position = -1,
   }) async {
@@ -87,7 +87,7 @@ class FlutterVideoCompress {
   /// );
   /// ```
   Future<File> getThumbnailWithFile(
-    String path, {
+    String? path, {
     int quality = 100,
     int position = -1,
   }) async {
@@ -100,7 +100,7 @@ class FlutterVideoCompress {
       'position': position,
     });
 
-    final file = File(filePath);
+    final file = File(filePath ?? "");
 
     return file;
   }
@@ -123,7 +123,7 @@ class FlutterVideoCompress {
   /// debugPrint(file.path);
   /// ```
   Future<File> convertVideoToGif(
-    String path, {
+    String? path, {
     int startTime = 0,
     int endTime = -1,
     int duration = -1, // When you do not know the end time
@@ -139,7 +139,7 @@ class FlutterVideoCompress {
       'duration': duration
     });
 
-    final file = File(filePath);
+    final file = File(filePath ?? "");
 
     return file;
   }
@@ -153,10 +153,10 @@ class FlutterVideoCompress {
   /// final info = await _flutterVideoCompress.getMediaInfo(file.path);
   /// debugPrint(info.toJson());
   /// ```
-  Future<MediaInfo> getMediaInfo(String path) async {
+  Future<MediaInfo> getMediaInfo(String? path) async {
     assert(path != null);
     final jsonStr = await _invoke<String>('getMediaInfo', {'path': path});
-    final jsonMap = json.decode(jsonStr);
+    final jsonMap = json.decode(jsonStr ?? "");
     return MediaInfo.fromJson(jsonMap);
   }
 
@@ -176,13 +176,13 @@ class FlutterVideoCompress {
   /// debugPrint(info.toJson());
   /// ```
   Future<MediaInfo> compressVideo(
-    String path, {
+    String? path, {
     VideoQuality quality = VideoQuality.DefaultQuality,
     bool deleteOrigin = false,
-    int startTime,
-    int duration,
-    bool includeAudio,
-    int frameRate,
+    int? startTime,
+    int? duration,
+    bool? includeAudio,
+    int? frameRate,
   }) async {
     assert(path != null);
     if (_isCompressing) {
@@ -205,7 +205,7 @@ class FlutterVideoCompress {
       'frameRate': frameRate,
     });
     _isCompressing = false;
-    final jsonMap = json.decode(jsonStr);
+    final jsonMap = json.decode(jsonStr ?? "");
     return MediaInfo.fromJson(jsonMap);
   }
 
@@ -228,6 +228,6 @@ class FlutterVideoCompress {
   /// await _flutterVideoCompress.deleteAllCache();
   /// ```
   Future<bool> deleteAllCache() async {
-    return await _invoke<bool>('deleteAllCache');
+    return await _invoke<bool>('deleteAllCache') ?? false;
   }
 }
